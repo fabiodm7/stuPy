@@ -55,7 +55,7 @@ s = float(input('Salario atual: '))
 print(f'A salario ajustado é R$ {aumentoSal(s)}')
 '''
 # carro novo ou velho, dependendo da idade
-idade = int(input('A quanto tempo tem o veículo, em anos? '))
-def novoVelho(idade_veiculo):
-    return 'carro velho'
-print(novoVelho(idade))
+# idade = int(input('A quanto tempo tem o veículo, em anos? '))
+# def novoVelho(idade_veiculo):
+#    return 'carro velho'
+# print(novoVelho(idade))
