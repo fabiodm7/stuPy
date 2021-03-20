@@ -77,22 +77,23 @@ print(f'{n} x {x} = {aux}.')
 # para chegar ao resultado. Lembre-se de que podemos entender o quociente da divisão de
 # de dois números como a quantidade de vezes que podemos retirar o divisor do dividendo.
 # Logo, 20/4 = 5, uma vez que podemos subtrair 4 cinco vezes de 20.
-n = int(input('Deseja dividir: '))
-x = int(input('Por: '))
-def divisao(n,x):
-    y = 1
-    aux = n
-    resto = 0
-    while aux > 0:
-        aux -= x
-        if aux >= x:
-            y += 1
-    print(f'{n} / {x} = {y}.')
-    if aux < x:
-        aux = aux + aux + aux + aux + aux + aux + aux + aux + aux + aux
-        while aux > 0:
-            aux -= x
-            if aux >= x:
-                resto += 1
-    print(f'{n} % {x} = {resto}.')
-divisao(n,x)
+a = int(input('Deseja dividir: '))
+b = int(input('Por: '))
+# def divisao(n,x):
+#    y = 1
+#    aux = n
+#    resto = 0
+#    while aux > 0:
+#        aux -= x
+#        if aux >= x:
+#            y += 1
+#    print(f'{n} / {x} = {y}.')
+#    if aux < x:
+#        aux = aux + aux + aux + aux + aux + aux + aux + aux + aux + aux
+#        while aux > 0:
+#            aux -= x
+#            if aux >= x:
+#                resto += 1
+#    print(f'{n} % {x} = {resto}.')
+print(f'{a} / {b} = {div}.')
+print(f'{a} % {b} = {res}.')
