@@ -3,7 +3,7 @@ Exercícios do capítulo 4 do livro "Introdução ao python"
 de Nilo Ney Coutinho Menezes
 
 Condições
-
+'''
 # o que acontece se o primeiro e segundo valor forem iguais?
 a = int(input('Primeiro valor: '))
 b = int(input('Segundo valor: '))
@@ -129,7 +129,7 @@ def financiamento(valorImovel, salario, tempo):
         return 'REPROVADO'
 
 print(f'O seu financiamento foi {financiamento(i,s,t)}.')
-'''
+
 # Escreva um programa que calcule o preço a pagar pelo forneciemnto de energia eletrica.
 # Pergunte a quantidade de kWh consumida e o tipo de instalação:
 # R para residencias, I para industris e C para comercios.
