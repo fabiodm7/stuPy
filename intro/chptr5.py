@@ -115,15 +115,300 @@ while questao <= 3:
         pontos += 1
     questao += 1
 print('O aluno fez %d ponto(s).' % pontos)
-'''
+
 # Escreva um programa que pergunte o depósito inicial e a taxa de juros de uma poupança.
 # Exiba os valores mês a mês para os 24 primeiros meses.
 # Escreva o total de ganho com juros no período
 x = float(input('Depósito inicial de: '))
 tx = float(input('Taxa de juros: '))/100
-t = int(input('Anos de investimento: '))
+t = int(input('Anos de investimento: '))*12
 t0 = 1
 while t0 <= t:
     x *= (1+tx)
     t0 += 1
 print('Você acumulou %.2f.' % x)
+
+# Altere o programa de forma a perguntar o valor a ser depositado mensalmente. Esse valor
+# será depositado no início de cada mês, e você deve considerá-lo para o cálculo de juros
+# do mês seguinte
+x = float(input('Depósito inicial de: '))
+tx = float(input('Taxa mensal de juro: '))/100
+t = int(input('Anos de investimento: '))*12
+y = float(input('O aporte mensal será de: '))
+t0 = 1
+while t0 <= t:
+    x *= (1+tx)
+    x += y
+    t0 += 1
+print('Você acumulou %.2f.' % x)
+
+# Escreva um programa que pergunte o valor inicial de uma dívida e juro mensal. Pergunte
+# também o valor mensal que será pago. Imprima o número de meses para que a dívida seja
+# paga, o total pago e o total de juros.
+divida = float(input('Dívida adquirida: '))
+tx = float(input('Taxa mensal de juro: '))/100
+aporte = float(input('O aporte mensal será de: '))
+correcao = divida
+tempo = 0
+pago = 0
+while correcao > 0:
+    correcao *= (1+tx)
+    correcao -= aporte
+    pago += aporte
+    tempo += 1
+juros = pago-divida
+print(f'Você levará {tempo} meses para pagar um total de R$ {pago}.')
+print(f'Sendo R$ {juros} de juros.')
+
+# Escreva um programa que leia numeros inteiros do teclado. O programa deve ler os números
+# até que o usuário digite 0. No final do programa imprima a quantidade de números, a soma
+# e a média aritmética
+contagem = 0
+soma = 0
+media = 0
+while True:
+    entrada = int(input('Digite um número de 1 a 9.\nDigite 0 (zero) para encerrar: '))
+    if entrada == 0:
+        break
+    contagem += 1
+    soma += entrada
+media = soma / contagem
+print(f'Você executou {contagem} cliques, sem contar o ZERO.\nResultou em uma soma de {soma} e uma média de {media}')
+
+# Escreva um programa para controlar uma pequena máquina registradora. Você deve solicitar
+# ao usuário que digite o código do produto e a quantidade comprada. Utilize a tabela para
+# obter o preço. Seu programa deve exibir o total de compras depois que o usuário digitar
+# 0 (zero). Qualquer outro código deve gerar a mensagem de codigo inválido:
+# +--------------+
+# |Codigo |Preço |
+# |-------|------|
+# |   1   | 0,50 |
+# |-------|------|
+# |   2   | 1,00 |
+# |-------|------|
+# |   3   | 4,00 |
+# |-------|------|
+# |   5   | 7,00 |
+# |-------|------|
+# |   9   | 8,00 |
+# +-------+------+
+itens,total = 0,0
+while True:
+    produto = int(input('Digite o código do produto comprado: '))
+    if produto == 0:
+        break
+    elif produto not in [1,2,3,5,9]:
+        print('Digite um produto válido')
+    itens += 1
+    if produto == 1:
+        total += 0.5
+    elif produto == 2:
+        total += 1
+    elif produto == 3:
+        total += 4
+    elif produto == 5:
+        total += 7
+    elif produto == 9:
+        total += 8
+print(f'Total de itens: {itens}\nTotal a pagar: R$ {total}')
+
+# Contagem de cédulas. Execute o programa para os seguintes valores: 501, 745, 384, 2, 7 e 1
+valor = int(input('Digite o valor a pagar: '))
+cedulas = 0
+atual = 50
+pagar = valor
+while True:
+    if atual <= pagar:
+        pagar -= atual
+        cedulas += 1
+    else:
+        print('%d cédula(s) de R$ %d' % (cedulas,atual))
+        if pagar == 0:
+            break
+        if atual == 50:
+            atual = 20
+        elif atual == 20:
+            atual = 10
+        elif atual == 10:
+            atual = 5
+        elif atual == 5:
+            atual = 1
+        cedulas = 0
+
+# o que acontece se digitar 0 no valor a pagar?
+# executa a primeira contagem de cédulas de R$ 50
+# e imprime a primeira linha "0 cédula(s) de R$ 50"
+
+# Modifique o programa para que aceite notas de R$ 100
+valor = int(input('Digite o valor a pagar: '))
+cedulas = 0
+atual = 100
+pagar = valor
+while True:
+    if atual <= pagar:
+        pagar -= atual
+        cedulas += 1
+    else:
+        print('%d cédula(s) de R$ %d' % (cedulas,atual))
+        if pagar == 0:
+            break
+        if atual == 100:
+            atual = 50
+        elif atual == 50:
+            atual = 20
+        elif atual == 20:
+            atual = 10
+        elif atual == 10:
+            atual = 5
+        elif atual == 5:
+            atual = 1
+        cedulas = 0
+
+# Modifique o programa para que aceite valores decimais, ou seja, conte moedas de 0.01
+# 0.05, 0.10, 0.25 e 0.50
+valor = float(input('Digite o valor a pagar: '))
+cedulas = 0
+atual = 100
+pagar = valor
+while True:
+    if atual <= pagar:
+        pagar -= atual
+        cedulas += 1
+    else:
+        if atual >= 1:
+            print('%d cédula(s) de R$ %d' % (cedulas,atual))
+        else:
+            print('%d moeda(s) de R$ %.2f' % (cedulas,atual))
+        if pagar <= 0.001:
+            break
+        if atual == 100:
+            atual = 50
+        elif atual == 50:
+            atual = 20
+        elif atual == 20:
+            atual = 10
+        elif atual == 10:
+            atual = 5
+        elif atual == 5:
+            atual = 1
+        elif atual == 1:
+            atual = 0.5
+        elif atual == 0.5:
+            atual = 0.25
+        elif atual == 0.25:
+            atual = 0.1
+        elif atual == 0.1:
+            atual = 0.05
+        elif atual == 0.05:
+            atual = 0.01
+        cedulas = 0
+
+# O que acontece se digitarmos 0.001 no programa anterior? Caso ele não funcione, altere-o
+# de forma a corrigir o problema
+# Já corrigido no programa anterior
+
+# Reescreva o programa anterior de forma a continuar executando até que o usuario digite 0.
+# Utilize repetições aninhadas
+valor = 1
+while valor > 0:
+    valor = float(input('Digite o valor a pagar: '))
+    cedulas = 0
+    atual = 100
+    pagar = valor
+    while True:
+        if atual <= pagar:
+            pagar -= atual
+            cedulas += 1
+        else:
+            if atual >= 1:
+                print('%d cédula(s) de R$ %d' % (cedulas,atual))
+            else:
+                print('%d moeda(s) de R$ %.2f' % (cedulas,atual))
+            if pagar <= 0.001:
+                break
+            if atual == 100:
+                atual = 50
+            elif atual == 50:
+                atual = 20
+            elif atual == 20:
+                atual = 10
+            elif atual == 10:
+                atual = 5
+            elif atual == 5:
+                atual = 1
+            elif atual == 1:
+                atual = 0.5
+            elif atual == 0.5:
+                atual = 0.25
+            elif atual == 0.25:
+                atual = 0.1
+            elif atual == 0.1:
+                atual = 0.05
+            elif atual == 0.05:
+                atual = 0.01
+            cedulas = 0
+
+# Escreva um programa que exiba uma lista de opçẽs (menu): adição, subtração, divisão,
+# multiplicação e sair. Imprima a tabuada da operação escolhida. Repita até que a opção
+# saída seja escolhida:
+opcao = ''
+while opcao != 's':
+    opcao = str(input('O que você deseja fazer agora:\n"+" para soma\n"-" para subtração\n"x" para multiplicação\n"%" para divisão\n"s" para sair\nDigite uma opção: ')).lower()
+    tabuada = 1
+    if opcao == 's':
+        break
+    elif opcao == '+':
+        while tabuada <= 10:
+            numero = 1
+            while numero <= 10:
+                print('%d + %d = %d' % (tabuada,numero,tabuada + numero))
+                numero += 1
+            tabuada += 1
+    elif opcao == '-':
+        while tabuada <= 10:
+            numero = 1
+            while numero <= 10:
+                print('%d - %d = %d' % (tabuada,numero,tabuada - numero))
+                numero += 1
+            tabuada += 1
+    elif opcao == 'x':
+        while tabuada <= 10:
+            numero = 1
+            while numero <= 10:
+                print('%d x %d = %d' % (tabuada,numero,tabuada * numero))
+                numero += 1
+            tabuada += 1
+    elif opcao == '%':
+        while tabuada <= 10:
+            numero = 1
+            while numero <= 10:
+                print('%d / %d = %.2f' % (tabuada,numero,tabuada / numero))
+                numero += 1
+            tabuada += 1
+    else:
+        print('Insira uma opção válida')
+        opcao = ''
+'''
+# Escreva um programa que leia um numero e verifique se é ou não um número primo
+# Para fazer essa verificação, calcule o resto da divisão do número por 2 e depois
+# por todos os números ímpares até o número lido. Se o resto de alguma dessas divisões
+# for igual a zero, o número não é primo. Observe que 0 e 1 não são primo e que 2 é
+# o único número primo que é par
+numero = 2
+while numero not in [0,1]:
+    numero = int(input('Digite um numero inteiro: '))
+    resto = True
+    if numero % 2 == 0:
+        resto = True
+    else: 
+        resto = False
+        impar = 1
+        while impar <= numero:
+            if numero % impar == 0:
+                resto = True
+            else:
+                impar += 2
+    if resto == False or numero == 2:
+        print('Número é primo')
+    else:
+        print('Número não é primo')
