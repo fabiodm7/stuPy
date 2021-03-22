@@ -388,7 +388,7 @@ while opcao != 's':
     else:
         print('Insira uma opção válida')
         opcao = ''
-'''
+
 # Escreva um programa que leia um numero e verifique se é ou não um número primo
 # Para fazer essa verificação, calcule o resto da divisão do número por 2 e depois
 # por todos os números ímpares até o número lido. Se o resto de alguma dessas divisões
@@ -397,18 +397,67 @@ while opcao != 's':
 numero = 2
 while numero not in [0,1]:
     numero = int(input('Digite um numero inteiro: '))
-    resto = True
-    if numero % 2 == 0:
-        resto = True
-    else: 
-        resto = False
-        impar = 1
-        while impar <= numero:
+    resto = False
+    if numero % 2 != 0:
+        impar = 3
+        while impar < numero:
             if numero % impar == 0:
                 resto = True
+                impar += 2
             else:
                 impar += 2
+    else:
+        resto = True
     if resto == False or numero == 2:
         print('Número é primo')
     else:
         print('Número não é primo')
+
+# Modifique o programa anterior de forma a ler um número N e imprimir os primeiros números primos
+def numeroPrimo(numero):
+    resto = False
+    if numero % 2 != 0:
+        impar = 3
+        while impar < numero:
+            if numero % impar == 0:
+                resto = True
+                impar += 2
+            else:
+                impar += 2
+    else:
+        resto = True
+    if resto == False or numero == 2:
+        #return True
+        print(numero)
+    #else:
+        #return False
+        
+
+entrada = int(input('Digite um numero inteiro: '))
+
+while entrada not in [0,1]:
+    n0 = 2
+    while n0 <= entrada:
+        numeroPrimo(n0)
+        n0 += 1
+    entrada = int(input('Digite um numero inteiro: '))
+
+# Escreva um prorama que calcule a raiz quadrada de um numero. Utilize o método de Newton para
+# obter o resultado aproximado. Sendo n o número a obter a raiz quadrada, considere a base b=2.
+# Calcule p usando a fórmula p=(b+(n/b))/2. Agora, calcule o quadrado de p. A cada passo, faça
+# b=p e recalcule p usando a fórmula apresentada. Pare quando a diferença absoluta entre n e o 
+# quadrado de p for menor que 0.0001
+def raizQuadrada(n):
+    b = 2
+    p2 = 0
+    p = 0
+    while abs(n - p2) >= 0.0001:
+        p = (b + (n / b)) / 2
+        p2 = p ** 2
+        b = p
+    return p
+entrada = float(input('Digite um número: '))
+print('A raiz quadrada de %.2f é %.3f' % (entrada,raizQuadrada(entrada)))
+'''
+# Escreva um programa que calcule o resto da divisao inteira entre dois números.
+# Utilize apenas as operações de soma e subtração para calcular o resultado.
