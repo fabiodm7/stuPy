@@ -3,7 +3,7 @@ Exercícios do capítulo 5 do livro "Introdução ao python"
 de Nilo Ney Coutinho Menezes
 
 Repetições
-
+'''
 # exiba números de 1 a 100
 x = 1
 while x <= 100:
@@ -458,6 +458,30 @@ def raizQuadrada(n):
     return p
 entrada = float(input('Digite um número: '))
 print('A raiz quadrada de %.2f é %.3f' % (entrada,raizQuadrada(entrada)))
-'''
-# Escreva um programa que calcule o resto da divisao inteira entre dois números.
+
+# Escreva um programa que calcule o resto da divisão inteira entre dois números.
 # Utilize apenas as operações de soma e subtração para calcular o resultado.
+divisor = float(input('Insira o divisor: '))
+dividendo = float(input('Insira o dividendo: '))
+resto = dividendo
+if divisor > dividendo:
+    count = 1
+    while count < 10:
+        resto += dividendo
+        count += 1
+while resto >= divisor:
+    resto -= divisor
+print(resto)
+
+# Escreva uma função que verifica se um número é palindromo. Um número é palindromo
+# se continua o mesmo quando seus digitos são invertidos. Exemplo: 454, 10501
+def palindromo(txt):
+    if txt == txt[::-1]:
+        return True
+    else:
+        return False
+entrada = input('Digite um número: ')
+if palindromo(entrada):
+    print('É palindromo')
+else:
+    print('Não é palindromo')
