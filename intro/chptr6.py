@@ -218,4 +218,19 @@ while x < len(l):
     if l[x] == v:
         print('%d achado na posição %d' % (v,x))
     x += 1
+
+# Adição de elementos a lista. Modifique o programa usando for
+l = []
+while True:
+    n = int(input('Digite um numero (0 sai): '))
+    if n == 0:
+        break
+    l.append(n)
+# x = 0
+# while x < len(l):
+#     print(l[x])
+#     x += 1
+for x in l:
+    print(x)
 '''
+# 
