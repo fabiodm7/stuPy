@@ -3,7 +3,7 @@ Exercícios do capítulo 6 do livro "Introdução ao python"
 de Nilo Ney Coutinho Menezes
 
 Listas
-
+'''
 # Cálculo de média com notas digitadas
 notas = []
 soma = 0
@@ -232,5 +232,134 @@ while True:
 #     x += 1
 for x in l:
     print(x)
-'''
-# 
+
+# Imprima o maior valor de uma lista
+l = [9,8,7,4,5,6,3,2,1,0]
+max = l[0]
+for i in l:
+    if i > max:
+        max = i
+print(max)
+
+# Imprima o menor valor de uma lista
+l = [9,8,7,4,5,6,3,2,1,0]
+min = l[0]
+for i in l:
+    if i < min:
+        min = i
+print(min)
+
+# A lista de temepratura de Mons, na Bélgica, foi armazenada na lista
+# T = [-10,-8,0,1,2,5,-2,-4]. Faça um programa que imprima a maior, a menor 
+# e temperatura média
+T = [-10,-8,0,1,2,5,-2,-4]
+min = T[0]
+max = T[0]
+soma = 0
+for i in T:
+    if i < min:
+        min = i
+    elif i > max:
+        max = i
+    soma += i 
+media = soma/len(T)
+print(f'Temp: {min} <= T <= {max}\nTemp média: {media}')
+
+# Ordenação pelo método de bolhas.
+# O que acontece quando a lista já está ordenada?
+# O que acontece quando foi valores são iguais?
+# l = [7,4,3,12,8]
+# l = [1,2,3,4,5]
+#l = [3,3,1,5,4]
+fim = len(l)
+while fim > 1:
+    trocou = False
+    x = 0
+    while x < (fim -1):
+        if l[x] > l[x+1]:
+            trocou = True
+            temp = l[x]
+            l[x] = l[x+1]
+            l[x+1] = temp
+        x += 1
+    if not trocou:
+        break
+    fim -= 1
+for e in l:
+    print (e)
+
+# Modifique o programa para ordenar em ordem descrescente
+l = [7,4,3,12,8]
+fim = len(l)
+while fim > 1:
+    trocou = False
+    x = 0
+    while x < (fim -1):
+        if l[x] < l[x+1]:
+            trocou = True
+            temp = l[x+1]
+            l[x+1] = l[x]
+            l[x] = temp
+        x += 1
+    if not trocou:
+        break
+    fim -= 1
+for e in l:
+    print (e)
+
+# Dicinário com estoque e operação de venda. Altere o programa para solicitar o produto
+# e a quantidade vendida. Verifique se o produto existe no estoque e só então efetue a baixa
+estoque = { "tomate": [ 1000, 2.30],
+            "alface": [  500, 0.45],
+            "batata": [ 2001, 1.20],
+            "feijao": [  100, 1.00]}
+# venda = [["tomate",5],["batata",10],["alface",5]]
+venda = [] # linha nova
+prod = ''
+while True: # linha nova
+    prod = input('Digite o produto desejado: ')
+    qtd = int(input('Digite a quantidade solicitada: '))
+    if prod == 'fim':
+        break
+    else:
+        venda.append([prod,qtd])
+total = 0
+print('Vendas:\n')
+for operacao in venda:
+    produto,quantidade = operacao
+    if produto not in estoque or estoque[produto][0] == 0:
+        print('%12s: EM FALTA!' % produto)
+    else:
+        preco = estoque[produto][1]
+        if quantidade <= estoque[produto][0]:
+            custo = preco * quantidade
+            print('%12s: %3d x %6.2f = %6.2f' % (produto, quantidade, preco, custo))
+            estoque[produto][0] -= quantidade
+        else:
+            custo = preco * estoque[produto][0]
+            print('%12s: %3d x %6.2f = %6.2f' % (produto, estoque[produto][0], preco, custo))
+            estoque[produto][0] = 0
+    total += custo
+print('Custo total: R$ %19.2f\n' % total)
+print('Estoque:\n')
+print('Descrição | Quantidade | Preço')
+for chave,dados in estoque.items():
+    print('%9s |%11d |%6.2f' % (chave,dados[0],dados[1]))
+
+# Escreva um programa que gere um dicinário, onde cada chave seja um caractere, e seu
+# valor seja a quantidade desse caractere encontrado em uma frase lida
+# Exemplo: O rato -> {"O":1,"r":1,"a":1,"t":1,"o":1}
+frase = input('Digite uma frase: ')
+dic = {}
+for d in frase:
+    if d == ' ':
+        None
+    else:
+        count = 0
+        idx = 0
+        while idx < len(frase):
+            if d == frase[idx]:
+                count += 1
+            idx += 1
+        dic[d] = count
+print(dic)
