@@ -3,7 +3,7 @@ Exercícios do capítulo 8 do livro "Introdução ao python"
 de Nilo Ney Coutinho Menezes
 
 Funções
-
+'''
 # Escreva uma função que retorne o maior de dois números
 def max(a,b):
     if a > b:
@@ -145,7 +145,7 @@ while tentativas < 3:
             print('Tente outra vez...')
         else:
             print('Perdeu!')
-'''
+
 # Altere o jogo da forca. Escolha a palavra a advinhar utilizando números aleatórios
 import random # linha nova
 lista_palavras = []
@@ -201,3 +201,20 @@ while True:
         print('Enforcado!')
         print('Resposta certa: {0}'.format(palavra))
         break
+
+# Utilizando a função type, escreva uma função recursiva que imprima os elementos
+# de uma lista. Cada elemento deve ser impresso separadamente, um por linha. Considere
+# o caso de listas dentro de listas, como L = [1,[2,3,4,[5,6,7]]]. A cada nível
+# imprima a lista mais à direita, como fazemos ao identar blocos em python.
+# Dica: envie o nível atual como parêmetro e utilize-o para calcular a quantidade de
+# espaços em branco à esquerda de cada elemento
+def listaElementos(lista,nivel=0):
+    for i in lista:
+        if type(i) != list:
+            espaco = ' '*nivel
+            print(espaco,i)
+        else:
+            nivel = nivel+4
+            listaElementos(i,nivel)
+L = [1,[2,3,4,[5,6,7]]]
+print(listaElementos(L))
