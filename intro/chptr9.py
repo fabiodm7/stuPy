@@ -69,4 +69,54 @@ for l in pares.readlines():
         multi4.write(l)
 pares.close()
 multi4.close()
-'''
+
+# Crie um programa que leia os arquivos pares.txt e impares.txt e que crie um só 
+# arquivo paresimpares.txt com todas as linhas dos dois arquivos, preservando a
+# ordem numerica
+pares = open('pares.txt','r')
+impares = open('impares.txt','r')
+paresimpares = open('paresImpares.txt','w')
+imp = []
+par = []
+for i in impares.readlines():
+    imp.append(int(i))
+for p in pares.readlines():
+    par.append(int(p))
+parimp = imp + par
+parimp.sort()
+for x in parimp:
+    paresimpares.write(str(x)+'\n')
+pares.close()
+impares.close()
+paresimpares.close()
+
+# Crie um programa que receba o nome de dois arquivos a partir da linha de comando
+# e gere um terceiro arquivo com as linhas dos dois arquivos
+import sys
+arquivo1 = open(sys.argv[1],'r')
+arquivo2 = open(sys.argv[2],'r')
+arquivo3 = open(sys.argv[3],'w')
+for a1 in arquivo1.readlines():
+    arquivo3.write(a1)
+for a2 in arquivo2.readlines():
+    arquivo3.write(a2)
+arquivo1.close()
+arquivo2.close()
+arquivo3.close()
+
+# Crie um programa que inverta a ordem do arquivo pares. A primeira linha deve
+# conter o maior número e a última o menor
+pares = open('pares.txt','r')
+# paresReverso = open('paresReversos.txt','w')
+par = []
+for p in pares.readlines():
+    par.append(int(p))
+par.sort(reverse=True)
+pares.close()
+pares = open('pares.txt','w')
+for p in par:
+    # paresReverso.write(str(p)+'\n')
+    pares.write(str(p)+'\n')
+pares.close()
+# paresReverso.close()
+''' 
