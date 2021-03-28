@@ -119,4 +119,18 @@ for p in par:
     pares.write(str(p)+'\n')
 pares.close()
 # paresReverso.close()
-''' 
+
+# Processamento de um arquivo
+largura = 100
+entrada = open('entrada.txt','r')
+for linha in entrada.readlines():
+    if linha.startswith(';'):
+        continue
+    elif linha.startswith('>'):
+        print(linha[1:].rjust(largura))
+    elif linha.startswith('*'):
+        print(linha[1:].center(largura))
+    else:
+        print(linha)
+entrada.close()
+'''
