@@ -120,7 +120,7 @@ for p in par:
 pares.close()
 # paresReverso.close()
 
-# Processamento de um arquivo
+# TEORIA: Processamento de um arquivo
 largura = 100
 entrada = open('entrada.txt','r')
 for linha in entrada.readlines():
@@ -133,4 +133,125 @@ for linha in entrada.readlines():
     else:
         print(linha)
 entrada.close()
+
+# Modifique o programa para imprimir 40x o símbolo "*" se este for o primeiro
+# caractere da linha. Adicione também a opção para parar de imprimir até que se
+# pressione a tecla Enter cada vez que a linha inicia com "."
+largura = 100
+entrada = open('entrada.txt','r')
+for linha in entrada.readlines():
+    if linha.startswith(';'):
+        continue
+    elif linha.startswith('>'):
+        print(linha[1:].rjust(largura))
+    elif linha.startswith('*'):
+        print(linha[1:].center(largura))
+        print('*'*40)
+    elif linha.startswith('.'):
+        input('Pressione Enter para continuar:')
+    else:
+        print(linha)
+entrada.close()
+
+# Crie um programa que leia um arquivo texto e gere um arquivo de saída paginado.
+# Cada linha não deve conter mais de 76 caracteres. Cada página terá no máximo 60
+# linhas. Adicione na última linha de cada página o número da página atual e o
+# nome do arquivo
+# Modifique o programa anterior para também receber o número de caracteres por linha
+# e o número de páginas por folha pela linha de comando
+import sys
+arquivo1 = sys.argv[1]
+arquivo2 = sys.argv[2]
+largura = int(sys.argv[3]) # 76
+comprimento = int(sys.argv[4]) # 60
+pagina = 1
+posicao = 0
+entrada = open(arquivo1,'r')
+saida = open(arquivo2,'w')
+nome = saida.name
+saidaComp = 0
+for linha in entrada.readlines():
+    if len(linha) <= largura:
+        saida.write(linha)
+        posicao += 1
+        saidaComp += 1
+    else:
+        qbr = 0
+        inicio = 0
+        while qbr < len(linha)/largura:
+            saida.write(linha[inicio:largura+inicio-1])
+            qbr += 1
+            inicio += largura-1
+            saidaComp += 1
+            if qbr <= len(linha)/largura:
+                saida.write('\n')
+        posicao += qbr
+    resto = posicao % (comprimento-1)
+    if posicao % (comprimento-1) == 0:
+        saida.write('---------- Arquivo {0}, Página {1} ----------\n'.format(nome,pagina))
+        pagina += 1
+        posicao = 0
+        saidaComp += 1
+entrada.close()
+saida.close()
+
+# Crie um programa que receba uma lista de nomes de arquivos e imprima um por um
+entrada = input('Insira os arquivos que deseja imprimir, separados por vírgula: ')
+arquivos = entrada.split(',')
+for a in arquivos:
+    arq = open(a,'r')
+    print('Imprimindo o arquivo: %s' % a)
+    for linha in arq:
+        print(linha)
+    arq.close()
+
+# Crie um programa que receba uma lista de nomes de arquivos e gere um unico arquivo
+# com o conteúdo de todos eles
+entrada = input('Insira os arquivos que deseja imprimir, separados por vírgula: ')
+arquivos = entrada.split(',')
+saida = open('saida.txt','w')
+for a in arquivos:
+    arq = open(a,'r')
+    print('Imprimindo o arquivo: %s' % a)
+    for linha in arq.readlines():
+        saida.write(linha)
+    entrada.close()
+saida.close()
+
+# Crie um programa que leia um arquivo e crie um dicionário onde cada chave é uma
+# palavra e cada valor é o número de ocorrências no arquivo
+entrada = open('entrada.txt','r')
+dic = {}
+lista = []
+for linha in entrada.readlines():
+    for l in linha.split(' '):
+        lista.append(l)
+for i in lista:
+    dic[i] = lista.count(i)
+print(dic)
+entrada.close()
 '''
+# Modifique o programa anterior para também registrar a linha e a coluna de cada
+# ocorrência da palavra no arquivo. Para isso, utilize listas nos valores de cada
+# palavra, guardando a linha e a coluna de cada ocorrência
+entrada = open('entrada.txt','r')
+dic = {}
+palavras = []
+posicoes = []
+lin = 0
+for linha in entrada.readlines():
+    for l in linha.split(' '):
+        palavras.append(l)
+        posicoes.append([l,lin,linha.find(l)])
+    lin += 1
+for i in palavras:
+    dic[i] = {'ocorrencias':palavras.count(i)}
+    pos = []
+    for j in posicoes:
+        if j[0] == i:
+            pos.append([j[1],j[2]])
+            dic[i]['posicoes'] = pos
+entrada.close()
+saida = open('saida.json','w')
+saida.write(str(dic).replace('\'','\"'))
+saida.close()
