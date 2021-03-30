@@ -230,7 +230,7 @@ for i in lista:
     dic[i] = lista.count(i)
 print(dic)
 entrada.close()
-'''
+
 # Modifique o programa anterior para também registrar a linha e a coluna de cada
 # ocorrência da palavra no arquivo. Para isso, utilize listas nos valores de cada
 # palavra, guardando a linha e a coluna de cada ocorrência
@@ -255,3 +255,219 @@ entrada.close()
 saida = open('saida.json','w')
 saida.write(str(dic).replace('\'','\"'))
 saida.close()
+
+# Crie um programa que imprime as linhas de um arquivo. Esse programa deve receber
+# três parâmetros pela linha de comando: o nome do arquivo, a linha inicial e a última
+# linha a imprimir
+import sys
+entrada = open(sys.argv[1],'r')
+inicio = int(sys.argv[2])
+fim = int(sys.argv[3])
+i = 1
+for linha in entrada.readlines():
+    if i >= inicio and i <= fim:
+        print(linha)
+    i += 1
+entrada.close()
+
+# Crie um programa que leia um arquivo texto e elemine os espaços repetidos entre as
+# palavras e no fim das linhas. O arquivo texto também não deve ter mais de uma linha
+# em branco repetida
+def rmvRpt(texto,s):
+    rpt = s + s
+    if rpt in texto:
+        return rmvRpt(texto.replace(rpt,s),s)
+    else:
+        return texto.replace(rpt,s)
+entrada = open('entrada.txt','r')
+saida = open('saida.txt','w')
+repetido = ' ' # input('Digite o caractere que deseja retirar as repetições: ')
+lista = ''.join(entrada.readlines())
+lista = rmvRpt(lista,repetido)
+saida.write(rmvRpt(lista,'\n\n'))
+entrada.close()
+saida.close()
+
+# Altere o jogo da forca. Utilize um arquivo em que uma palavra seja gravada em cada
+# linha. Ao iniciar o programa, utilize ese arquivo esse arquivo para carregar a lista
+# de palavras. Experimente também perguntar o nome do jogador e gerar uma arquivo com
+# o número de acertos dos 5 melhores
+import random
+import sys # linha nova
+lista_palavras = []
+#tamanho = int(input('Quantas palavras: ')) 
+#for i in range(tamanho):
+entrada = open('palavras.txt','r') # sys.argv[1],'r') # linha nova
+saida = open('vencedores.txt','r')
+campeoes = []
+for s in saida.readlines():
+    if s != '\n':
+        campeoes.append(s[:-1])
+saida.close()
+for linha in entrada.readlines(): # linha nova
+    lista_palavras.append(linha[:-1].lower().replace(' ','_')) # input('Digite a palavra secreta: ').lower().strip())
+# for x in range(100):
+#     print()
+digitadas = []
+acertos = []
+erros = 0
+palavra = random.sample(lista_palavras,1)[0]
+jogador = input('Quem é o jogador: ')
+vitorias = 0
+while True:
+    senha = ''
+    for letra in palavra:
+        senha += letra if letra in acertos else '.'
+    print(senha)
+    if senha == palavra:
+        print('Você acertou!')
+        campeoes.append(jogador)
+        saida = open('vencedores.txt','w')
+        for c in campeoes:
+            saida.write(str(c)+'\n')
+        break
+    tentativa = input('\nDigite uma letra: ').lower().strip()
+    if tentativa in digitadas:
+        print('Você já tentou essa letra.')
+        continue
+    else:
+        digitadas += tentativa
+        if tentativa in palavra:
+            acertos += tentativa
+        else:
+            erros += 1
+            print('Você errou!')
+    print('X==:==\nX  :  ')
+    print('X  0  ' if erros >= 1 else 'X')
+    linha2 = ''
+    if erros == 2:
+        linha2 = '  |  '
+    elif erros == 3:
+        linha2 = ' \\|  '
+    elif erros >= 4:
+        linha2 = ' \\|/ '
+    print('X%s' % linha2)
+    linha3 = ''
+    if erros == 5:
+        linha3 += ' /   '
+    elif erros >= 6:
+        linha3 += ' / \\ '
+    print('X%s' % linha3)
+    print('X\n===========')
+    if erros == 6:
+        print('Enforcado!')
+        print('Resposta certa: {0}'.format(palavra))
+        break
+entrada.close()
+saida.close()
+'''
+# TEORIA: Controle de uma agenda de telefones
+agenda = []
+def pede_nome():
+    return(input('Nome: '))
+def pede_telefone():
+    return(input('Telefone: '))
+def mostra_dados(nome,telefone):
+    print('Nome: %s Telefone: %s' % (nome,telefone))
+def pede_nome_arquivo():
+    return(input('Nome do arquivo: '))
+def pesquisa(nome):
+    mnome = nome.lower()
+    for p, e in enumerate(agenda):
+        if e[0].lower() == mnome:
+            return p
+    return None
+def novo():
+    global agenda
+    nome = pede_nome()
+    telefone = pede_telefone()
+    agenda.append([nome,telefone])
+def apaga():
+    global agenda
+    nome = pede_nome()
+    p = pesquisa(nome)
+    if p != None:
+        del agenda[p]
+    else:
+        print('Nome não encontrado.')
+def altera():
+    p = pesquisa(pede_nome())
+    if p != None:
+        nome = agenda[p][0]
+        telefone = agenda[p][1]
+        print('Encontrado:')
+        mostra_dados(nome,telefone)
+        nome = pede_nome()
+        telefone = pede_telefone()
+        agenda[p] = [nome,telefone]
+    else:
+        print('Nome não encontrado.')
+def lista():
+    print('\nAgenda\n\n------')
+    for e in agenda:
+        mostra_dados(e[0],e[1])
+    print('------\n')
+def le(a):
+    global agenda
+    nome_arquivo = a # pede_nome_arquivo()
+    arquivo = open(nome_arquivo,'r',encoding = 'utf-8')
+    agenda = []
+    for l in arquivo.readlines():
+        nome, telefone = l.strip(0).split('#')
+        agenda.append([nome,telefone])
+    arquivo.close()
+def grava(a):
+    nome_arquivo = a # pede_nome_arquivo()
+    arquivo = open(nome_arquivo,'w',encoding = 'utf-8')
+    for e in agenda:
+        arquivo.write('%s#%s\n' % (e[0],e[1]))
+    arquivo.close()
+def valida_faixa_inteiro(pergunta,inicio,fim):
+    while True:
+        try:
+            valor = int(input(pergunta))
+            if inicio <= valor <= fim:
+                return(valor)
+        except ValueError:
+            print('Valor inválido, favor digitar entre %d e %d' % (inicio,fim))
+def conta_contatos(a):
+    arquivo = open(a,'r',encoding = 'utf-8')
+    i = len(arquivo.readlines())
+    return('%d contato(s)' % i)
+def menu(a):
+    print('''
+        1 - Novo contato
+        2 - Altera contato
+        3 - Apaga contato
+        4 - Lista de contatos
+        5 - Grava contato
+        6 - Lê contato
+        0 - Sair
+        '''
+    )
+    print(conta_contatos(a)) # Linha nova
+    return valida_faixa_inteiro('Escolha um opção: ',0,6)
+arquivo = pede_nome_arquivo()
+while True:
+    opcao = menu(arquivo)
+    if opcao == 0:
+        break
+    elif opcao == 1:
+        novo()
+    elif opcao == 2:
+        altera()
+    elif opcao == 3:
+        apaga()
+    elif opcao == 4:
+        lista()
+    elif opcao == 5:
+        grava(arquivo)
+    elif opcao == 6:
+        le(arquivo)
+# Explique como os campos nome e telefone são gravados no arquivo de saída
+# RESPOSTA: Apaga e o conteudo e registra um novo contato
+
+# Altera o programa para exibir o tamanho da agenda no menu principal
+
+# O que acontece se o nome ou telefone contiverem o caractere separador em seus conteúdos?
+# Explique o problema e proponha uma solução
