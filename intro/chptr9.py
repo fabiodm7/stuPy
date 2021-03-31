@@ -739,4 +739,114 @@ print(os.getcwd())
 import os
 os.makedirs('avo/pai/filho')
 os.makedirs('avo/mae/filha')
+
+# TEORIA: Alteração do nome de arquivos e diretórios
+import os
+os.mkdir('velho')
+os.rename('velho','novo')
+
+# TEORIA: Alteração do nome de arquivos e diretórios
+import os
+os.rename('avo/pai/filho','avo/mae/filho')
+
+# TEORIA: Exclusão de arquivos e diretórios
+import os
+open('morimbundo.txt','w').close() # Cria um arquivo e o fecha imediatamente
+os.mkdir('vago')
+os.rmdir('vago')
+os.remove('morimbundo.txt')
+os.rmdir('avo/pai')
+os.rmdir('avo/mae/filho')
+os.rmdir('avo/mae/filha')
+os.rmdir('d')
+os.rmdir('e')
+os.rmdir('f')
+os.rmdir('avo/mae')
+os.rmdir('avo')
+os.rmdir('novo')
+
+# TEORIA: Listagem do nome de arquivos e diretórios
+import os
+print(os.listdir('.'))
+print(os.listdir('./intro'))
+
+# TEORIA: Verificação se é diretório ou arquivo
+import os
+import os.path
+for a in os.listdir('.'):
+    if os.path.isdir(a):
+        print('%s/' % a)
+    elif os.path.isfile(a):
+        print('%s' % a)
+
+# Verificação se um diretório ou arquivo já existe
+import os.path
+diretorio = 'intro'
+if os.path.exists(diretorio):
+    print('O diretorio %s/ existe' % diretorio)
+else:
+    print('O diretorio %s/ não existe' % diretorio)
+
+# Crie um programa que corrija o programa anterior de forma a verificar se o diretorio
+# existe e é um diretório
+import os.path
+diretorio = 'agenda.txt'
+if os.path.exists(diretorio):
+    if os.path.isdir(diretorio):
+        print('O diretorio %s/ existe' % diretorio)
+    else:
+        print('%s existe, mas é um arquivo' % diretorio)
+else:
+    print('O diretorio ou arquivo %s não existe' % diretorio)
+
+# Modifique o programa de forma a receber o nome do arquivo ou diretório a verificar 
+# pela linha de comando. Imprima se existir e se for um arquivo ou um diretório
+import sys
+import os.path
+diretorio = sys.argv[1]
+if os.path.exists(diretorio):
+    if os.path.isdir(diretorio):
+        print('O diretorio %s/ existe' % diretorio)
+    else:
+        print('%s existe, mas é um arquivo' % diretorio)
+else:
+    print('O diretorio ou arquivo %s não existe' % diretorio)
+
+# Crie um programa que gere uma página html com links para todos os arquivos jpg e png
+# encontrados a partir de um diretório informado na linha de comando
+import sys
+import os
+import os.path
+diretorio = '../stuPy' # sys.argv[1]
+arquivos = os.listdir(diretorio)
+pagina = open('arquivos.html','w',encoding='utf-8')
+pagina.write(''''''<DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Arquivos do diretório</title>
+</head>
+<body>
+'''''')
+pagina.write('<h1>%s</h1>' % diretorio)
+pagina.write('<ul>')
+for a in arquivos:
+    if a[-3:] == 'txt':
+        pagina.write('<li><a href="%s/%s" target="_blank">%s</a></li>' % (diretorio,a,a))
+pagina.write('</ul>')
+pagina.write(''''''</body>
+</html>'''''')
+pagina.close()
+
+# Obtenção de mais informações sobre o arquivo
+import os
+import os.path
+import time
+import sys
+nome = 'entrada.txt' # sys.artv[1]
+print('Nome: %s' % nome)
+print('Tamanho: %d bytes' % os.path.getsize(nome))
+print('Criado: %s' % time.ctime(os.path.getctime(nome)))
+print('Modificado: %s' % time.ctime(os.path.getmtime(nome)))
+print('Acessado: %s' % time.ctime(os.path.getatime(nome)))
 '''
