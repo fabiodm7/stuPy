@@ -362,13 +362,22 @@ entrada.close()
 saida.close()
 '''
 # TEORIA: Controle de uma agenda de telefones
-agenda = []
 def pede_nome():
-    return(input('Nome: '))
+    nome = (input('Nome: '))
+    if '#' in nome:
+        print('Caracter inválido(#) encontrado. Tente novamente')
+        return pede_nome()
+    else:
+        return nome
 def pede_telefone():
-    return(input('Telefone: '))
-def mostra_dados(nome,telefone):
-    print('Nome: %s Telefone: %s' % (nome,telefone))
+    telefone = (input('Telefone: '))
+    if '#' in telefone:
+        print('Caracter inválido(#) encontrado. Tente novamente')
+        return pede_telefone()
+    else:
+        return telefone
+def mostra_dados(posicao,nome,telefone):
+    print('[%d] Nome: %s Telefone: %s' % (posicao+1,nome,telefone))
 def pede_nome_arquivo():
     return(input('Nome do arquivo: '))
 def pesquisa(nome):
@@ -387,25 +396,40 @@ def apaga():
     nome = pede_nome()
     p = pesquisa(nome)
     if p != None:
-        del agenda[p]
+        check = input('''
+            Deseja realmente realizar a operação:
+            - Excluir o contato: %s
+            Sim/Não [s/n]: '''
+            % (nome)
+        )
+        if check.lower() == 's':
+            del agenda[p]
     else:
         print('Nome não encontrado.')
 def altera():
     p = pesquisa(pede_nome())
     if p != None:
-        nome = agenda[p][0]
-        telefone = agenda[p][1]
+        nomeOld = agenda[p][0]
+        telefoneOld = agenda[p][1]
         print('Encontrado:')
-        mostra_dados(nome,telefone)
+        mostra_dados(p,nomeOld,telefoneOld)
         nome = pede_nome()
         telefone = pede_telefone()
-        agenda[p] = [nome,telefone]
+        check = input('''
+            Deseja realmente realizar a operação:
+            - %s -> %s
+            - %s -> %s
+            Sim/Não [s/n]: '''
+            % (nomeOld,nome,telefoneOld,telefone)
+        )
+        if check.lower() == 's':
+            agenda[p] = [nome,telefone]
     else:
         print('Nome não encontrado.')
 def lista():
     print('\nAgenda\n\n------')
-    for e in agenda:
-        mostra_dados(e[0],e[1])
+    for x, e in enumerate(agenda):
+        mostra_dados(x,e[0],e[1])
     print('------\n')
 def le(a):
     global agenda
@@ -413,7 +437,7 @@ def le(a):
     arquivo = open(nome_arquivo,'r',encoding = 'utf-8')
     agenda = []
     for l in arquivo.readlines():
-        nome, telefone = l.strip(0).split('#')
+        nome, telefone = l.strip().split('#')
         agenda.append([nome,telefone])
     arquivo.close()
 def grava(a):
@@ -434,6 +458,10 @@ def conta_contatos(a):
     arquivo = open(a,'r',encoding = 'utf-8')
     i = len(arquivo.readlines())
     return('%d contato(s)' % i)
+def ordenar():
+    global agenda
+    agenda = sorted(agenda, key = lambda x : x[0])
+    lista()
 def menu(a):
     print('''
         1 - Novo contato
@@ -441,12 +469,14 @@ def menu(a):
         3 - Apaga contato
         4 - Lista de contatos
         5 - Grava contato
-        6 - Lê contato
+        6 - Lê contatos
+        7 - Ordenar contatos por nome
         0 - Sair
         '''
     )
     print(conta_contatos(a)) # Linha nova
-    return valida_faixa_inteiro('Escolha um opção: ',0,6)
+    return valida_faixa_inteiro('Escolha uma opção: ',0,7)
+agenda = []
 arquivo = pede_nome_arquivo()
 while True:
     opcao = menu(arquivo)
@@ -464,10 +494,24 @@ while True:
         grava(arquivo)
     elif opcao == 6:
         le(arquivo)
+    elif opcao == 7:
+        ordenar()
+        
 # Explique como os campos nome e telefone são gravados no arquivo de saída
-# RESPOSTA: Apaga e o conteudo e registra um novo contato
+# RESPOSTA: Apaga o conteudo e registra um novo contato, caso o usuário não efetue a 
+# leitura antes de dar o comando gravar, todo o conteúdo é substituído.
 
 # Altera o programa para exibir o tamanho da agenda no menu principal
 
 # O que acontece se o nome ou telefone contiverem o caractere separador em seus conteúdos?
 # Explique o problema e proponha uma solução
+# RESPOSTA: o erro "too manu values to unpack" ocorre ao ler os contatos e interrompe
+# a execução, deve-se verificar se o separador não foi utilizado nas entradas, antes de
+# gravar o conteúdo
+
+# Altere a função lista para que exiba também a posição de cada elemento
+
+# Adicione a opção de ordenar a lista por nome no menu principal
+
+# Nas funções de altera de apaga, peça ao usuário que confirme a operação antes de
+# realizá-la 
