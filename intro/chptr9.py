@@ -360,26 +360,46 @@ while True:
         break
 entrada.close()
 saida.close()
-'''
+
 # TEORIA: Controle de uma agenda de telefones
-def pede_nome():
+def pede_nome(s=''):
     nome = (input('Nome: '))
-    if '#' in nome:
-        print('Caracter inválido(#) encontrado. Tente novamente')
+    if repetido(nome):
+        print('O nome digitado já consta na lista, digite outro!')
         return pede_nome()
     else:
-        return nome
-def pede_telefone():
+        if len(s) > 0 and len(nome) <= 0:
+            return s
+        else:
+            if '#' in nome:
+                print('Caracter inválido(#) encontrado. Tente novamente')
+                return pede_nome()
+            else:
+                return nome
+def pede_telefone(s=''):
     telefone = (input('Telefone: '))
-    if '#' in telefone:
-        print('Caracter inválido(#) encontrado. Tente novamente')
-        return pede_telefone()
+    if len(s) > 0 and len(telefone) <= 0:
+        return s
     else:
-        return telefone
-def mostra_dados(posicao,nome,telefone):
-    print('[%d] Nome: %s Telefone: %s' % (posicao+1,nome,telefone))
+        if '#' in telefone:
+            print('Caracter inválido(#) encontrado. Tente novamente')
+            return pede_telefone()
+        else:
+            return telefone
+def mostra_dados(posicao,nome,telefone,aniversario,email):
+    print('[%d] Nome: %s Telefone: %s Aniversario: %s E-mail: %s' % (posicao+1,nome,telefone,aniversario,email))
 def pede_nome_arquivo():
-    return(input('Nome do arquivo: '))
+    arquivo = open('arquivo.txt','r')
+    a = arquivo.readline()
+    if len(a) <= 1:
+        arquivo.close()
+        arquivo = open('arquivo.txt','w')
+        a = input('Nome do arquivo: ')
+        arquivo.write(a)
+        arquivo.close()
+        return a
+    else:
+        return a
 def pesquisa(nome):
     mnome = nome.lower()
     for p, e in enumerate(agenda):
@@ -388,48 +408,65 @@ def pesquisa(nome):
     return None
 def novo():
     global agenda
+    global status
+    status = False
     nome = pede_nome()
     telefone = pede_telefone()
+    aniversario = pede_aniversario()
+    email = pede_email()
     agenda.append([nome,telefone])
+    stts()
 def apaga():
     global agenda
+    global status
+    status = False
     nome = pede_nome()
     p = pesquisa(nome)
     if p != None:
-        check = input('''
+        check = input(''''''
             Deseja realmente realizar a operação:
             - Excluir o contato: %s
-            Sim/Não [s/n]: '''
+            Sim/Não [s/n]:''''''
             % (nome)
         )
         if check.lower() == 's':
             del agenda[p]
     else:
         print('Nome não encontrado.')
+    stts()
 def altera():
     p = pesquisa(pede_nome())
     if p != None:
         nomeOld = agenda[p][0]
         telefoneOld = agenda[p][1]
+        aniversarioOld = agenda[p][2]
+        emailOld = agenda[p][3]
         print('Encontrado:')
-        mostra_dados(p,nomeOld,telefoneOld)
+        mostra_dados(p,nomeOld,telefoneOld,aniversarioOld,emailOld)
         nome = pede_nome()
         telefone = pede_telefone()
-        check = input('''
+        aniversario = pede_aniversario()
+        email = pede_email()
+        check = input(''''''
             Deseja realmente realizar a operação:
             - %s -> %s
             - %s -> %s
-            Sim/Não [s/n]: '''
-            % (nomeOld,nome,telefoneOld,telefone)
+            - %s -> %s
+            - %s -> %s
+            Sim/Não [s/n]: ''''''
+            % (nomeOld,nome,telefoneOld,telefone,aniversarioOld,aniversario,emailOld,email)
         )
         if check.lower() == 's':
             agenda[p] = [nome,telefone]
     else:
         print('Nome não encontrado.')
+    global status
+    status = False
+    stts()
 def lista():
     print('\nAgenda\n\n------')
     for x, e in enumerate(agenda):
-        mostra_dados(x,e[0],e[1])
+        mostra_dados(x,e[0],e[1],e[2],e[3])
     print('------\n')
 def le(a):
     global agenda
@@ -437,15 +474,19 @@ def le(a):
     arquivo = open(nome_arquivo,'r',encoding = 'utf-8')
     agenda = []
     for l in arquivo.readlines():
-        nome, telefone = l.strip().split('#')
-        agenda.append([nome,telefone])
+        nome, telefone, aniversario, email = l.strip().split('#')
+        agenda.append([nome,telefone,aniversario,email])
     arquivo.close()
+    stts()
 def grava(a):
+    global status
+    status = True
     nome_arquivo = a # pede_nome_arquivo()
     arquivo = open(nome_arquivo,'w',encoding = 'utf-8')
     for e in agenda:
-        arquivo.write('%s#%s\n' % (e[0],e[1]))
+        arquivo.write('%s#%s#%s#%s\n' % (e[0],e[1],e[2],e[3]))
     arquivo.close()
+    stts()
 def valida_faixa_inteiro(pergunta,inicio,fim):
     while True:
         try:
@@ -457,13 +498,64 @@ def valida_faixa_inteiro(pergunta,inicio,fim):
 def conta_contatos(a):
     arquivo = open(a,'r',encoding = 'utf-8')
     i = len(arquivo.readlines())
-    return('%d contato(s)' % i)
+    return('%d contato(s) gravados' % i)
 def ordenar():
     global agenda
+    global status
+    status = False
     agenda = sorted(agenda, key = lambda x : x[0])
     lista()
+def stts():
+    global status
+    if status == False:
+        print('Agenda não foi salva ainda, escolha a opção gravar.')
+    else:
+        print('Agenda gravada ou não alterada.')
+def repetido(nome):
+    global agenda
+    rpt = False
+    for x, e in enumerate(agenda):
+        if nome in e:
+            rpt = True
+            break
+        else:
+            rpt = False
+    return rpt
+def pede_aniversario():
+    aniversario = (input('Data de aniversario DD/MM/YYYY: '))
+    if '#' in aniversario:
+        print('Caracter inválido(#) encontrado. Tente novamente')
+        return pede_aniversario()
+    else:
+        if aniversario[2] == '/' and aniversario[5] == '/' and len(aniversario) == 10:
+            return aniversario
+        else:
+            print('Formato inválido. Tente novamente')
+            return pede_aniversario()
+def pede_email():
+    email = (input('Data de aniversario DD/MM/YYYY: '))
+    if '#' in email:
+        print('Caracter inválido(#) encontrado. Tente novamente')
+        return pede_email()
+    else:
+        if '@' not in email:
+            return email
+        else:
+            print('Formato inválido. Tente novamente')
+            return pede_email()
+def atualizar(arq,a = False):
+    if a:
+        global agenda
+        arquivo = open(arq,'r',encoding = 'utf-8')
+        for linha in arquivo.readlines():
+            agenda.append(linha.strip().split('#'))
+        for e in agenda:
+            while len(e) < 4:
+                e.append('')
+        arquivo.close()
+        grava(arq)
 def menu(a):
-    print('''
+    print(''''''
         1 - Novo contato
         2 - Altera contato
         3 - Apaga contato
@@ -471,13 +563,15 @@ def menu(a):
         5 - Grava contato
         6 - Lê contatos
         7 - Ordenar contatos por nome
-        0 - Sair
-        '''
+        0 - Sair''''''
     )
     print(conta_contatos(a)) # Linha nova
     return valida_faixa_inteiro('Escolha uma opção: ',0,7)
 agenda = []
+# atualizacao = True
+status = True
 arquivo = pede_nome_arquivo()
+# atualizar(arquivo,atualizacao)
 while True:
     opcao = menu(arquivo)
     if opcao == 0:
@@ -514,4 +608,135 @@ while True:
 # Adicione a opção de ordenar a lista por nome no menu principal
 
 # Nas funções de altera de apaga, peça ao usuário que confirme a operação antes de
-# realizá-la 
+# realizá-la
+
+# Ao ler ou gravar uma nova lista, verifique se a agenda atual já foi gravada. Você
+# pode usar uma variável para controlar quando a lista foi alterada (novo, altera,
+# apaga) e reinicializar esse valor quando ela for lida ou gravada
+
+# Altere o programa para ler a última agenda lida ou gravada ao inicializar. Dica:
+# utilize outro arquivo para armazenar o nome
+
+# O que acontece com a agenda se ocorrer um erro de leitura ou gravação?
+# RESPOSTA: Um erro interrompe a execução do programa e tudo realizado é perdido
+
+# Altere as funções pede_nome e pede_telefone de forma a receberem um parâmetro opcional.
+# Caso esse parâmetro seja passado, utilize-o como retorno caso a entrada de dados seja
+# vazia
+
+# Altere o programa de forma a verificar a repetição de nomes. Gere uma mensagem de erro,
+# caso duas entradas na agenda tenham o mesmo o nome
+
+# Modifique o programa para também controlar a data de aniversário e o e-mail do contato
+
+# Modifique o programa de forma a resistrar vários telefones para a mesma pessoa.
+# Permita também cadastrar o tipo do telefone: celular, fixo, residência, trabalho ou fax
+# NAO FOI DESENVOLVIDO
+
+# TEORIA: Criação de um página inicial em python
+pagina = open('pagina.html','w',encoding='utf-8')
+pagina.write('<DOCTYPE html>\n')
+pagina.write('<html lang=\"pt-BR\">\n')
+pagina.write('<head>\n')
+pagina.write('<meta charset=\"utf-8\">\n')
+pagina.write('<title>Título da página</title>\n')
+pagina.write('</head>\n')
+pagina.write('<body>\n')
+pagina.write('Olá!\n')
+for l in range(100):
+    pagina.write('<p>%d</p>\n' % l)
+pagina.write('</body>\n')
+pagina.write('</html>\n')
+pagina.close()
+
+# TEORIA: Criação de um página inicial em python usando aspas triplas
+pagina = open('pagina.html','w',encoding='utf-8')
+pagina.write(''''''<DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Título da página</title>
+</head>
+<body>
+Olá!
+'''''')
+for l in range(25):
+    pagina.write('<p>%d</p>\n' % l)
+pagina.write(''''''</body>
+</html>'''''')
+pagina.close()
+
+# TEORIA: Pagina web a partir de um dicionário
+filmes = {
+    "drama":["Cidadão Kane","O Poderoso Chefão"],
+    "comédia":["Tempos Modernos","American Pie","Dr. Dolittle"],
+    "policial":["Chuva Negra","Desejo de Matar","Difícil de Matar"],
+    "guerra":["Rambo","Platoon","Tora!Tora!Tora!"]
+}
+pagina = open('filmes.html','w',encoding='utf-8')
+pagina.write(''''''<DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Filmes</title>
+</head>
+<body>
+Olá!
+'''''')
+for c,v in filmes.items():
+    pagina.write('<h1>%s</h1>' % c)
+    pagina.write('<ul>')
+    for e in v:
+        # pagina.write('<h2>%s</h2>' % e)
+        # pagina.write('<p>%s</p>' % e)
+        pagina.write('<li>%s</li>' % e)
+    pagina.write('</ul>')
+pagina.write(''''''</body>
+</html>'''''')
+pagina.close()
+
+# Modifique o programa para utilizar <p> invés de <h2>
+
+# Modifique o programa para gerara uma lista hmtl, utilizando os elementos ul e li.
+# Todos os elementos da lista devem estar dentro do elemento ul, e cada item dentro 
+# de um li. Exemplo:
+# <ul><li>Item1</li><li>Item2</li><li>Item3</li></ul>
+
+# TEORIA: Diretório atual
+import os
+dAtual = os.getcwd()
+print(dAtual)
+
+# TEORIA: Troca de diretório
+import os
+os.chdir('intro')
+print(os.getcwd())
+os.chdir('..')
+print(os.getcwd())
+os.chdir('..')
+print(os.getcwd())
+os.chdir('stuPy/intro')
+print(os.getcwd())
+os.chdir('../../stuPy')
+print(os.getcwd())
+
+# TEORIA: Criar diretórios
+import os
+os.mkdir('d')
+os.mkdir('e')
+os.mkdir('f')
+print(os.getcwd())
+os.chdir('d')
+print(os.getcwd())
+os.chdir('../e')
+print(os.getcwd())
+os.chdir('..')
+print(os.getcwd())
+os.chdir('f')
+print(os.getcwd())
+
+# TEORIA: Criar diretórios intermediarios
+import os
+os.makedirs('avo/pai/filho')
+os.makedirs('avo/mae/filha')
+'''
