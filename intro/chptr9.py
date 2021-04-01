@@ -974,6 +974,33 @@ for raiz,diretorios,arquivos in os.walk(sys.argv[1]):
     for f in arquivos:
         print(' %s' % f)
     print('%d diretorio(s), %d arquivo(s)' % (len(diretorios),len(arquivos)))
+
+# Utilizando a função os.walk, crie uma página html com o nome e o tamanho de cada
+# arquivo de um diretório passado e de seus subdiretórios
+import sys
+import os
+import os.path
+diretorio = '../stuPy' # sys.argv[1]
+arquivos = os.listdir(diretorio)
+pagina = open('diretorios.html','w',encoding='utf-8')
+pagina.write(''''''<DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Arquivos do diretório</title>
+</head>
+<body>
+'''''')
+pagina.write('<h1>%s</h1>' % diretorio)
+for raiz,diretorios,arquivos in os.walk(diretorio): # sys.argv[1]):
+    pagina.write('<h2>Caminho: %s</h2>' % raiz)
+    for d in diretorios:
+        pagina.write('<p> %s/</p>' % d)
+    for f in arquivos:
+        pagina.write('<p> %s - %s</p>' % (f,os.path.getsize(f)))
+pagina.write(''''''</body>
+</html>'''''')
+pagina.close()
 '''
-# Utilizando a função os.walk, crie uma página html com o nome tamanho de cada arquivo
-# de um diretório passado e de seus subdiretórios
+# Utilizando a função os.walk, crie um programa que calcule o espaço ocupado por cada
+# diretório e subdiretório, gerando uma página HTML com os resultados
