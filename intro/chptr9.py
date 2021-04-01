@@ -838,7 +838,7 @@ pagina.write(''''''</body>
 </html>'''''')
 pagina.close()
 
-# Obtenção de mais informações sobre o arquivo
+# TEORIA: Obtenção de mais informações sobre o arquivo
 import os
 import os.path
 import time
@@ -849,4 +849,131 @@ print('Tamanho: %d bytes' % os.path.getsize(nome))
 print('Criado: %s' % time.ctime(os.path.getctime(nome)))
 print('Modificado: %s' % time.ctime(os.path.getmtime(nome)))
 print('Acessado: %s' % time.ctime(os.path.getatime(nome)))
+
+# TEORIA: Obtenção das horas em python
+import time
+agora = time.time()
+print(agora)
+agora = time.ctime(agora)
+print(agora)
+agora2 = time.localtime()
+print(agora2)
+agora3 = time.gmtime(time.time())
+print(agora3)
+
+# TEORIA: Obtenção de data e hora por nome
+import time
+agora = time.localtime()
+print('Ano: %d' % agora.tm_year)
+print('Mês: %d' % agora.tm_mon)
+print('Dia: %d' % agora.tm_mday)
+print('Hora: %d' % agora.tm_hour)
+print('Minuto: %d' % agora.tm_min)
+print('Segundo: %d' % agora.tm_sec)
+print('Dia da semana: %d' % agora.tm_wday)
+print('Dia do ano: %d' % agora.tm_yday)
+print('Horário de verão: %d' % agora.tm_isdst)
+
+# Altere o jogo da forca. Utilize funções de tempo para cronometrar a duração de
+# cada partida
+import random
+import sys
+import time # linha nova
+lista_palavras = []
+entrada = open('palavras.txt','r')
+saida = open('vencedores.txt','r')
+campeoes = []
+for s in saida.readlines():
+    if s != '\n':
+        campeoes.append(s[:-1])
+saida.close()
+for linha in entrada.readlines():
+    lista_palavras.append(linha[:-1].lower().replace(' ','_'))
+digitadas = []
+acertos = []
+erros = 0
+palavra = random.sample(lista_palavras,1)[0]
+jogador = input('Quem é o jogador: ')
+inicio = time.time() # linha nova
+vitorias = 0
+def tempo(inicio,final): # linha nova
+    return('%s segundos' % (final - inicio)) # linha nova
+while True:
+    senha = ''
+    for letra in palavra:
+        senha += letra if letra in acertos else '.'
+    print(senha)
+    if senha == palavra:
+        print('Você acertou!')
+        fim = time.time() # linha nova
+        print('Duração da partida: %s' % tempo(inicio,fim)) # linha nova
+        campeoes.append(jogador)
+        saida = open('vencedores.txt','w')
+        for c in campeoes:
+            saida.write(str(c)+'\n')
+        break
+    tentativa = input('\nDigite uma letra: ').lower().strip()
+    if tentativa in digitadas:
+        print('Você já tentou essa letra.')
+        continue
+    else:
+        digitadas += tentativa
+        if tentativa in palavra:
+            acertos += tentativa
+        else:
+            erros += 1
+            print('Você errou!')
+    print('X==:==\nX  :  ')
+    print('X  0  ' if erros >= 1 else 'X')
+    linha2 = ''
+    if erros == 2:
+        linha2 = '  |  '
+    elif erros == 3:
+        linha2 = ' \\|  '
+    elif erros >= 4:
+        linha2 = ' \\|/ '
+    print('X%s' % linha2)
+    linha3 = ''
+    if erros == 5:
+        linha3 += ' /   '
+    elif erros >= 6:
+        linha3 += ' / \\ '
+    print('X%s' % linha3)
+    print('X\n===========')
+    if erros == 6:
+        print('Enforcado!')
+        print('Resposta certa: {0}'.format(palavra))
+        fim = time.time() # linha nova
+        print('Duração da partida: %s' % tempo(inicio,fim)) # linha nova
+        break
+entrada.close()
+saida.close()
+
+# TEORIA: Uso de caminhos
+import os.path
+caminho = 'i/j/k'
+print(os.path.abspath(caminho))
+print(os.path.basename(caminho))
+print(os.path.dirname(caminho))
+print(os.path.split(caminho))
+print(os.path.splitext('agenda.txt'))
+print(os.path.splitdrive('C:/Windows'))
+
+# TEORIA: Combinação dos componentes de um caminho
+import os.path
+print(os.path.join('c:','dados','programas'))
+print(os.path.abspath(os.path.join('c:','dados','programas')))
+
+# TEORIA: Visita a todos os subdiretorios recursivamente
+import os
+import sys
+for raiz,diretorios,arquivos in os.walk(sys.argv[1]):
+    print('\nCaminho: ', raiz)
+    for d in diretorios:
+        print(' %s/' % d)
+    for f in arquivos:
+        print(' %s' % f)
+    print('%d diretorio(s), %d arquivo(s)' % (len(diretorios),len(arquivos)))
 '''
+# Utilizando a função os.walk, crie uma página html com o nome tamanho de cada arquivo
+# de um diretório passado e de seus subdiretórios
