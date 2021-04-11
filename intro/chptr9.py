@@ -3,7 +3,7 @@ Exercícios do capítulo 9 do livro "Introdução ao python"
 de Nilo Ney Coutinho Menezes
 
 Arquivos
-
+'''
 # TEORIA: Abrindo, escrevendo e fechando um arquivo
 arquivo = open('numeros.txt','w')
 for linha in range(1,51):
@@ -423,10 +423,10 @@ def apaga():
     nome = pede_nome()
     p = pesquisa(nome)
     if p != None:
-        check = input(''''''
+        check = input('''
             Deseja realmente realizar a operação:
             - Excluir o contato: %s
-            Sim/Não [s/n]:''''''
+            Sim/Não [s/n]:'''
             % (nome)
         )
         if check.lower() == 's':
@@ -447,13 +447,13 @@ def altera():
         telefone = pede_telefone()
         aniversario = pede_aniversario()
         email = pede_email()
-        check = input(''''''
+        check = input('''
             Deseja realmente realizar a operação:
             - %s -> %s
             - %s -> %s
             - %s -> %s
             - %s -> %s
-            Sim/Não [s/n]: ''''''
+            Sim/Não [s/n]: '''
             % (nomeOld,nome,telefoneOld,telefone,aniversarioOld,aniversario,emailOld,email)
         )
         if check.lower() == 's':
@@ -555,7 +555,7 @@ def atualizar(arq,a = False):
         arquivo.close()
         grava(arq)
 def menu(a):
-    print(''''''
+    print('''
         1 - Novo contato
         2 - Altera contato
         3 - Apaga contato
@@ -563,7 +563,7 @@ def menu(a):
         5 - Grava contato
         6 - Lê contatos
         7 - Ordenar contatos por nome
-        0 - Sair''''''
+        0 - Sair'''
     )
     print(conta_contatos(a)) # Linha nova
     return valida_faixa_inteiro('Escolha uma opção: ',0,7)
@@ -651,7 +651,7 @@ pagina.close()
 
 # TEORIA: Criação de um página inicial em python usando aspas triplas
 pagina = open('pagina.html','w',encoding='utf-8')
-pagina.write(''''''<DOCTYPE html>
+pagina.write('''<DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
@@ -659,11 +659,11 @@ pagina.write(''''''<DOCTYPE html>
 </head>
 <body>
 Olá!
-'''''')
+''')
 for l in range(25):
     pagina.write('<p>%d</p>\n' % l)
-pagina.write(''''''</body>
-</html>'''''')
+pagina.write('''</body>
+</html>''')
 pagina.close()
 
 # TEORIA: Pagina web a partir de um dicionário
@@ -674,7 +674,7 @@ filmes = {
     "guerra":["Rambo","Platoon","Tora!Tora!Tora!"]
 }
 pagina = open('filmes.html','w',encoding='utf-8')
-pagina.write(''''''<DOCTYPE html>
+pagina.write('''<DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
@@ -682,7 +682,7 @@ pagina.write(''''''<DOCTYPE html>
 </head>
 <body>
 Olá!
-'''''')
+''')
 for c,v in filmes.items():
     pagina.write('<h1>%s</h1>' % c)
     pagina.write('<ul>')
@@ -691,8 +691,8 @@ for c,v in filmes.items():
         # pagina.write('<p>%s</p>' % e)
         pagina.write('<li>%s</li>' % e)
     pagina.write('</ul>')
-pagina.write(''''''</body>
-</html>'''''')
+pagina.write('''</body>
+</html>''')
 pagina.close()
 
 # Modifique o programa para utilizar <p> invés de <h2>
@@ -820,22 +820,22 @@ import os.path
 diretorio = '../stuPy' # sys.argv[1]
 arquivos = os.listdir(diretorio)
 pagina = open('arquivos.html','w',encoding='utf-8')
-pagina.write(''''''<DOCTYPE html>
+pagina.write('''<DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <title>Arquivos do diretório</title>
 </head>
 <body>
-'''''')
+''')
 pagina.write('<h1>%s</h1>' % diretorio)
 pagina.write('<ul>')
 for a in arquivos:
     if a[-3:] == 'txt':
         pagina.write('<li><a href="%s/%s" target="_blank">%s</a></li>' % (diretorio,a,a))
 pagina.write('</ul>')
-pagina.write(''''''</body>
-</html>'''''')
+pagina.write('''</body>
+</html>''')
 pagina.close()
 
 # TEORIA: Obtenção de mais informações sobre o arquivo
@@ -983,14 +983,14 @@ import os.path
 diretorio = '../stuPy' # sys.argv[1]
 arquivos = os.listdir(diretorio)
 pagina = open('diretorios.html','w',encoding='utf-8')
-pagina.write(''''''<DOCTYPE html>
+pagina.write('''<DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <title>Arquivos do diretório</title>
 </head>
 <body>
-'''''')
+''')
 pagina.write('<h1>%s</h1>' % diretorio)
 for raiz,diretorios,arquivos in os.walk(diretorio): # sys.argv[1]):
     pagina.write('<h2>Caminho: %s</h2>' % raiz)
@@ -998,9 +998,39 @@ for raiz,diretorios,arquivos in os.walk(diretorio): # sys.argv[1]):
         pagina.write('<p> %s/</p>' % d)
     for f in arquivos:
         pagina.write('<p> %s - %s</p>' % (f,os.path.getsize(f)))
-pagina.write(''''''</body>
-</html>'''''')
+pagina.write('''</body>
+</html>''')
 pagina.close()
-'''
+
 # Utilizando a função os.walk, crie um programa que calcule o espaço ocupado por cada
 # diretório e subdiretório, gerando uma página HTML com os resultados
+import sys
+import os
+import os.path
+diretorio = '../stuPy' # sys.argv[1]
+pagina = open('diretoriosTamanhos.html','w',encoding='utf-8')
+pagina.write('''<DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Arquivos do diretório</title>
+</head>
+<body>
+''')
+pagina.write('<h1>%s</h1>' % diretorio)
+tamanho = 0
+for raiz,diretorios,arquivos in os.walk(diretorio):
+    pagina.write('<h2>Caminho: %s</h2>' % raiz)
+    tam = 0
+    for f in arquivos:
+        arq = os.path.join(raiz,f)
+        tam += int(os.path.getsize(arq))
+        tamanho += tam
+        pagina.write('<p> %s - %s</p>' % (f,os.path.getsize(arq)))
+    pagina.write('<p>Tamanho do diretório atual: %.1f kB</p>' % (tam/1024))
+    for d in diretorios:
+        pagina.write('<p> %s/</p>' % d)
+pagina.write('<p>Tamanho total: %.1f kB</p>' % (tamanho/1024))
+pagina.write('''</body>
+</html>''')
+pagina.close()
