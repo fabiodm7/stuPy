@@ -244,3 +244,174 @@ ccJoao.deposito(95.15)
 ccJoaoMaria.saque(250)
 ccJoaoMaria.extrato()
 ccJoao.extrato()
+
+# Altere o programa de forma que a mensagem saldo insuficiente seja exibida caso
+# haja tentativa de sacar mais dinheiro que o saldo disponível
+class conta:
+    def __init__(self,clientes,numero,saldo = 0):
+        self.saldo = 0
+        self.clientes = clientes
+        self.numero = numero
+        self.opercacoes = []
+        self.deposito(saldo)
+    def resumo(self):
+        print('CC número: %s Saldo: %10.2f' % (self.numero,self.saldo))
+    def saque(self,valor):
+        if self.saldo >= valor:
+            self.saldo -= valor
+            self.opercacoes.append(['Saque',valor])
+        else:
+            print('Saldo insuficiente! Saldo atual: %10.2f' % self.saldo)
+    def deposito(self,valor):
+        self.saldo += valor
+        self.opercacoes.append(['Deposito',valor])
+    def extrato(self):
+        print('Extrato CC No.: %s\n' % self.numero)
+        for o in self.opercacoes:
+            print('%10s %10.2f' % (o[0],o[1]))
+        print('\n    Saldo: %10.2f\n' % self.saldo)
+
+# Modifique o método classe Conta para exibir o nome e telefone de cada cliente
+class conta:
+    def __init__(self,clientes,numero,saldo = 0):
+        self.saldo = 0
+        self.clientes = clientes
+        self.numero = numero
+        self.opercacoes = []
+        self.deposito(saldo)
+    def resumo(self):
+        print('CC número: %s Saldo: %10.2f' % (self.numero,self.saldo))
+        # if len(self.clientes) > 1:
+        for i in self.clientes:
+            print('Cliente: %s Contato: %s' % (i.nome,i.telefone))
+        # else:
+        #     print('Cliente: %s Contato: %s' % (self.clientes.nome,self.clientes.telefone))
+    def saque(self,valor):
+        if self.saldo >= valor:
+            self.saldo -= valor
+            self.opercacoes.append(['Saque',valor])
+        else:
+            print('Saldo insuficiente! Saldo atual: %10.2f' % self.saldo)
+    def deposito(self,valor):
+        self.saldo += valor
+        self.opercacoes.append(['Deposito',valor])
+    def extrato(self):
+        print('Extrato CC No.: %s\n' % self.numero)
+        self.resumo()
+        for o in self.opercacoes:
+            print('%10s %10.2f' % (o[0],o[1]))
+        print('\n    Saldo: %10.2f\n' % self.saldo)
+
+# Crie uma nova conta, agora tendo João e José como clientes e saldo igual a 500
+from cliente import cliente
+from contas import conta
+
+joao = cliente("Joao da Silva","11987577806")
+maria = cliente("Maria da Silva","11986677786")
+
+ccJoaoMaria = conta([joao,maria],'00001',500)
+ccJoao = conta([joao],'00002',1000)
+
+ccJoaoMaria.saque(50)
+ccJoao.deposito(300)
+ccJoaoMaria.saque(190)
+ccJoao.deposito(95.15)
+ccJoaoMaria.saque(250)
+ccJoaoMaria.extrato()
+ccJoao.extrato()
+ccJoaoMaria.saque(100000)
+ccJoaoMaria.resumo()
+ccJoao.resumo()
+
+jose = cliente("Jose da Silva","11987577806")
+
+ccJoaoJose = conta([joao,jose],'00003',500)
+
+ccJoaoJose.extrato()
+
+# TEORIA: Classe banco
+class banco:
+    def __init__(self,nome):
+        self.nome = nome
+        self.clientes = []
+        self.contas = []
+    def abreConta(self,conta):
+        self.contas.append(conta)
+    def listaContas(self):
+        for c in self.contas:
+            c.resumo()
+
+# TEORIA: Criando objetos
+from cliente import cliente
+from banco import banco
+from contas import conta
+joao = cliente('Joao da Silva','3241-5599')
+maria = cliente('Maria Silva','7231-9955')
+jose = cliente('Jose Vargas','9721-3040')
+contaJoaoMaria = conta([joao,maria],100)
+contaJose = conta([jose],10)
+tatu = banco('Tatu')
+tatu.abreConta(contaJoaoMaria)
+tatu.abreConta(contaJose)
+tatu.listaContas()
+
+# Crie classes para representar estados e cidades. Cada estado tem um nome, sigla 
+# e cidades. Cada cidade tem nome e população. Escreva um programa de testes que crie 
+# três estados com algumas cidades em cada um. Exiba a população de cada estado como 
+# a soma da população de suas cidades.
+
+# região.py
+class estado:
+    def __init__(self,nome,sigla):
+        self.nome = nome
+        self.sigla = sigla
+        self.cidades = []
+        self.populacao = 0
+    def totalPop(self):
+        for c in self.cidades:
+            self.populacao += c.populacao
+    def novaCidade(self,cidade):
+        for c in cidade:
+            self.cidades.append(c)
+        self.totalPop()
+    def resumo(self):
+        print('Estado: %s\nSigla: %s\nHabitantes: %d' % (self.nome,self.sigla,self.populacao))
+        print('Cidades:')
+        for c in self.cidades:
+            print('%s | %d' % (c.nome,c.populacao))
+
+class cidade:
+    def __init__(self,nome,populacao,siglaEstado):
+        self.nome = nome
+        self.populacao = populacao
+        self.siglaEstado = siglaEstado
+
+# teste.py
+import regiao as rg
+
+saoPauloCidade = rg.cidade('Sao Paulo', 100000, 'SP')
+saoCarlos = rg.cidade('Sao Carlos', 50000, 'SP')
+saoBernardo = rg.cidade('Sao Bernardo do Campo', 25000, 'SP')
+santoAndre = rg.cidade('Santo Andre', 25000, 'SP')
+
+paulo = rg.cidade('Paulo', 100000, 'RJ')
+carlos = rg.cidade('Carlos', 50000, 'RJ')
+bernardo = rg.cidade('Bernardo do Campo', 25000, 'RJ')
+andre = rg.cidade('Andre', 25000, 'RJ')
+
+cotia = rg.cidade('Cotia', 50000, 'MG')
+beloHorizonte = rg.cidade('Belo Horizonte', 100000, 'MG')
+triangulo = rg.cidade('Triangulo Mineiro', 50000, 'MG')
+
+saoPaulo = rg.estado('Sao Paulo','SP')
+rioJaneiro = rg.estado('Rio de Janeiro','RJ')
+minasGerais = rg.estado('Minas Gerais','MG')
+
+saoPaulo.novaCidade([saoBernardo,saoCarlos,saoPauloCidade,santoAndre])
+rioJaneiro.novaCidade([andre,bernardo,carlos,paulo])
+minasGerais.novaCidade([beloHorizonte,cotia,triangulo])
+
+saoPaulo.resumo()
+rioJaneiro.resumo()
+minasGerais.resumo()
+'''
