@@ -37,7 +37,7 @@ tatu = banco('Tatu')
 tatu.abreConta(contaJoaoMaria)
 tatu.abreConta(contaJose)
 tatu.listaContas()
-'''
+
 import regiao as rg
 
 saoPauloCidade = rg.cidade('Sao Paulo', 100000, 'SP')
@@ -65,3 +65,19 @@ minasGerais.novaCidade([beloHorizonte,cotia,triangulo])
 saoPaulo.resumo()
 rioJaneiro.resumo()
 minasGerais.resumo()
+'''
+from cliente import cliente
+from contas import conta, contaEspecial
+joao = cliente('Joao da Silva','777-1234')
+maria = cliente('Maria da Silva','555-4321')
+conta1 = conta([joao],1,1000)
+conta2 = contaEspecial([maria,joao],2,500,1000)
+conta1.saque(50)
+conta2.deposito(300)
+conta1.saque(190)
+conta2.deposito(95.15)
+conta2.saque(1500)
+conta1.extrato()
+conta2.extrato()
+conta1.saque(1500)
+conta2.saque(1500)

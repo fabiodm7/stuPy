@@ -210,20 +210,20 @@ class conta:
         self.saldo = 0
         self.clientes = clientes
         self.numero = numero
-        self.opercacoes = []
+        self.operacoes = []
         self.deposito(saldo)
     def resumo(self):
         print('CC número: %s Saldo: %10.2f' % (self.numero,self.saldo))
     def saque(self,valor):
         if self.saldo >= valor:
             self.saldo -= valor
-            self.opercacoes.append(['Saque',valor])
+            self.operacoes.append(['Saque',valor])
     def deposito(self,valor):
         self.saldo += valor
-        self.opercacoes.append(['Deposito',valor])
+        self.operacoes.append(['Deposito',valor])
     def extrato(self):
         print('Extrato CC No.: %s\n' % self.numero)
-        for o in self.opercacoes:
+        for o in self.operacoes:
             print('%10s %10.2f' % (o[0],o[1]))
         print('\n    Saldo: %10.2f\n' % self.saldo)
 
@@ -252,22 +252,22 @@ class conta:
         self.saldo = 0
         self.clientes = clientes
         self.numero = numero
-        self.opercacoes = []
+        self.operacoes = []
         self.deposito(saldo)
     def resumo(self):
         print('CC número: %s Saldo: %10.2f' % (self.numero,self.saldo))
     def saque(self,valor):
         if self.saldo >= valor:
             self.saldo -= valor
-            self.opercacoes.append(['Saque',valor])
+            self.operacoes.append(['Saque',valor])
         else:
             print('Saldo insuficiente! Saldo atual: %10.2f' % self.saldo)
     def deposito(self,valor):
         self.saldo += valor
-        self.opercacoes.append(['Deposito',valor])
+        self.operacoes.append(['Deposito',valor])
     def extrato(self):
         print('Extrato CC No.: %s\n' % self.numero)
-        for o in self.opercacoes:
+        for o in self.operacoes:
             print('%10s %10.2f' % (o[0],o[1]))
         print('\n    Saldo: %10.2f\n' % self.saldo)
 
@@ -277,7 +277,7 @@ class conta:
         self.saldo = 0
         self.clientes = clientes
         self.numero = numero
-        self.opercacoes = []
+        self.operacoes = []
         self.deposito(saldo)
     def resumo(self):
         print('CC número: %s Saldo: %10.2f' % (self.numero,self.saldo))
@@ -289,16 +289,16 @@ class conta:
     def saque(self,valor):
         if self.saldo >= valor:
             self.saldo -= valor
-            self.opercacoes.append(['Saque',valor])
+            self.operacoes.append(['Saque',valor])
         else:
             print('Saldo insuficiente! Saldo atual: %10.2f' % self.saldo)
     def deposito(self,valor):
         self.saldo += valor
-        self.opercacoes.append(['Deposito',valor])
+        self.operacoes.append(['Deposito',valor])
     def extrato(self):
         print('Extrato CC No.: %s\n' % self.numero)
         self.resumo()
-        for o in self.opercacoes:
+        for o in self.operacoes:
             print('%10s %10.2f' % (o[0],o[1]))
         print('\n    Saldo: %10.2f\n' % self.saldo)
 
@@ -414,4 +414,102 @@ minasGerais.novaCidade([beloHorizonte,cotia,triangulo])
 saoPaulo.resumo()
 rioJaneiro.resumo()
 minasGerais.resumo()
+
+# TEORIA: Uso de herança para definir Conta Especial
+class contaEspecial(conta):
+    def __init__(self,clientes,numero,saldo=0,limite=0):
+        conta.__init__(self,clientes,numero,saldo)
+        self.limite = limite
+    def saque(self,valor):
+        if self.saldo + self.limite >= valor:
+            self.saldo -= valor
+            self.operacoes.append(['Saque: ',valor])
+
+# TEORIA: Criação e uso de uma ContaEspecial
+from cliente import cliente
+from contas import conta, contaEspecial
+joao = cliente('Joao da Silva','777-1234')
+maria = cliente('Maria da Silva','555-4321')
+conta1 = conta([joao],1,1000)
+conta2 = contaEspecial([maria,joao],2,500,1000)
+conta1.saque(50)
+conta2.deposito(300)
+conta1.saque(190)
+conta2.deposito(95.15)
+conta2.saque(1500)
+conta1.extrato()
+conta2.extrato()
+
+# Modifique as classes Conta e ContaEspecial para que a operação de saque retorne
+# verdadeiro se o saque foi efetuado e falso em caso contrário
+class conta:
+    def __init__(self,clientes,numero,saldo = 0):
+        self.saldo = 0
+        self.clientes = clientes
+        self.numero = numero
+        self.operacoes = []
+        self.deposito(saldo)
+    def resumo(self):
+        print('CC número: %s Saldo: %10.2f' % (self.numero,self.saldo))
+        # if len(self.clientes) > 1:
+        for i in self.clientes:
+            print('Cliente: %s Contato: %s' % (i.nome,i.telefone))
+        # else:
+        #     print('Cliente: %s Contato: %s' % (self.clientes.nome,self.clientes.telefone))
+    def saque(self,valor):
+        if self.saldo >= valor:
+            self.saldo -= valor
+            self.operacoes.append(['Saque',valor])
+            return True
+        else:
+            print('Saldo insuficiente! Saldo atual: %10.2f' % self.saldo)
+            return False
+    def deposito(self,valor):
+        self.saldo += valor
+        self.operacoes.append(['Deposito',valor])
+    def extrato(self):
+        print('Extrato CC No.: %s\n' % self.numero)
+        self.resumo()
+        for o in self.operacoes:
+            print('%10s %10.2f' % (o[0],o[1]))
+        print('\n    Saldo: %10.2f\n' % self.saldo)
+
+# Altere a classe contaEspecial de forma que seu extrato exiba o limite e o total 
+# disponível para saque
+class contaEspecial(conta):
+    def __init__(self,clientes,numero,saldo=0,limite=0):
+        conta.__init__(self,clientes,numero,saldo)
+        self.limite = limite
+    def saque(self,valor):
+        if self.saldo + self.limite >= valor:
+            self.saldo -= valor
+            self.operacoes.append(['Saque: ',valor])
+            return True
+        else:
+            print('Valor excede o limite de %10.2f! Saldo atual: %10.2f' % ((self.limite*-1),self.saldo))
+            return False
+
+class contaEspecial(conta):
+    def __init__(self,clientes,numero,saldo=0,limite=0):
+        conta.__init__(self,clientes,numero,saldo)
+        self.limite = limite
+    def saque(self,valor):
+        if self.saldo + self.limite >= valor:
+            self.saldo -= valor
+            self.operacoes.append(['Saque: ',valor])
+            return True
+        else:
+            print('Valor excede o limite de %10.2f! Saldo atual: %10.2f' % ((self.limite*-1),self.saldo))
+            return False
+    def resumo(self):
+        print('CC número: %s Saldo: %10.2f Limite: %10.2f' % (self.numero,self.saldo,(self.limite*-1)))
+        # if len(self.clientes) > 1:
+        for i in self.clientes:
+            print('Cliente: %s Contato: %s' % (i.nome,i.telefone))
+    def extrato(self):
+        print('Extrato CC No.: %s\n' % self.numero)
+        self.resumo()
+        for o in self.operacoes:
+            print('%10s %10.2f' % (o[0],o[1]))
+        print('\n    Saldo: %10.2f\n' % self.saldo)
 '''
