@@ -12,8 +12,12 @@ class conta:
             print('Cliente: %s Contato: %s' % (i.nome,i.telefone))
         # else:
         #     print('Cliente: %s Contato: %s' % (self.clientes.nome,self.clientes.telefone))
-    def saque(self,valor):
+    def temSaldo(self,valor):
         if self.saldo >= valor:
+            return True
+        else: return False
+    def saque(self,valor):
+        if self.temSaldo(valor): # self.saldo >= valor:
             self.saldo -= valor
             self.operacoes.append(['Saque',valor])
             return True
@@ -34,8 +38,12 @@ class contaEspecial(conta):
     def __init__(self,clientes,numero,saldo=0,limite=0):
         conta.__init__(self,clientes,numero,saldo)
         self.limite = limite
-    def saque(self,valor):
+    def temSaldo(self,valor):
         if self.saldo + self.limite >= valor:
+            return True
+        else: return False
+    def saque(self,valor):
+        if self.temSaldo(valor): # self.saldo + self.limite >= valor:
             self.saldo -= valor
             self.operacoes.append(['Saque: ',valor])
             return True
