@@ -65,7 +65,7 @@ minasGerais.novaCidade([beloHorizonte,cotia,triangulo])
 saoPaulo.resumo()
 rioJaneiro.resumo()
 minasGerais.resumo()
-'''
+
 from cliente import cliente
 from contas import conta, contaEspecial
 joao = cliente('Joao da Silva','777-1234')
@@ -81,3 +81,4 @@ conta1.extrato()
 conta2.extrato()
 conta1.saque(1500)
 conta2.saque(1500)
+'''
