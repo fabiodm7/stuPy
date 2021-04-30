@@ -1,4 +1,10 @@
 {
     "python.pythonPath": "/usr/bin/python3" //ubuntu
+    
     //python.pythonPath: "C:\\Users\\fmedina\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe" //windows
+
+    ,"python.linting.pylintArgs": [
+        "----extension-pkg-whitelist=1xml",
+       
+      ],
 }
