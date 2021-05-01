@@ -52,7 +52,7 @@ def gameLoop():
 # chamamos a função para executar o nosso gameLoop
 gameLoop()
 '''
-'''
+
 # Cobra
 import pygame
 import random
@@ -61,8 +61,9 @@ azul = (50, 100, 213)
 laranja = (205, 102, 0)
 verde = (0, 255, 0)
 
-dimensoes = (600, 600)### VALORES INICIAIS ###
+dimensoes = (600, 600)
 
+### VALORES INICIAIS ###
 x = 300
 y = 300
 
@@ -156,35 +157,79 @@ dis = pygame.display.set_mode((disWidth,disHeight))
 
 pygame.display.set_caption('Meu jogo')
 
+scoreFont = pygame.font.SysFont('/usr/share/fonts/truetype/freefont/FreeSans.ttf',35)
+
+player = pygame.image.load('/home/fdmedina/Imagens/Crop Captura de tela de 2021-04-23 20-32-17.png')
+
+playerRect = player.get_rect()
+
+charSpeed = [speed,speed]
+
+def verifyGameBounds(positionX,positionY):
+    if positionY > (disHeight - squareSize):
+        positionY = disHeight - squareSize
+    if positionY < 0:
+        positionY = 0
+    if positionX > (disWidth - squareSize):
+        positionX = disWidth - squareSize
+    if positionX < 0:
+        positionX = 0
+
+    return (positionX,positionY)
+
 def gameLoop():
     gameOver = False
 
     # posição inicial
-    positionX = disWidth/2
-    positionY = 0
+    positionX = disWidth / 2
+    positionY = disHeight / 2
+
+    # # usaremos para controlar a movimentação
+    x1Change = 0
+    y1Change = 0
+    
+    score = 100
 
     while not gameOver:
+        displayScore(score)
         pygame.display.update()
 
+        # # usaremos para controlar a movimentação
+        # x1Change = 0
+        # y1Change = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameOver = True
-        
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                    x1Change = -speed
+                    y1Change = 0
+                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                    x1Change = speed
+                    y1Change = 0
+                elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                    x1Change = 0
+                    y1Change = -speed
+                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                    x1Change = 0
+                    y1Change = speed
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_w or event.key == pygame.K_s:
+                    y1Change = 0
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT or event.key == pygame.K_d or event.key == pygame.K_a:
+                    x1Change = 0
+
         dis.fill(black)
 
         pygame.draw.rect(dis, red, [positionX,positionY,squareSize,squareSize])
 
-        # utilizando o speed para alterar o posicionamento do retangulo
-        positionY += speed
+        positionX += x1Change
+        positionY += y1Change
 
-        if positionY > (disHeight - squareSize):
-            positionY = disHeight - squareSize
-        if positionY < 0:
-            positionY = 0
-        if positionX > (disWidth - squareSize):
-            positionX = disWidth - squareSize
-        if positionX < 0:
-            positionX = 0
+        positionX,positionY = verifyGameBounds(positionX,positionY)
+        # utilizando o speed para alterar o posicionamento do retangulo
+        # positionY += speed
 
         pygame.display.update()
 
@@ -193,5 +238,9 @@ def gameLoop():
     
     pygame.quit()
 
+def displayScore(score):
+    msgScore = scoreFont.render('Your score: ' + str(score),True,yellow)
+    dis.blit(msgScore,[0,0])
 # chamamos a função para executar o nosso gameLoop
 gameLoop()
+'''
