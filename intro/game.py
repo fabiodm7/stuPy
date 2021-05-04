@@ -57,9 +57,14 @@ gameLoop()
 import pygame
 import random
 
+pygame.init()
+pygame.display.init()
+pygame.font.init()
+
 azul = (50, 100, 213)
 laranja = (205, 102, 0)
 verde = (0, 255, 0)
+amarelo = (255,255,102)
 
 dimensoes = (600, 600)
 
@@ -76,6 +81,8 @@ dy = 0
 
 x_comida = round(random.randrange(0, 600 - d) / 20) * 20
 y_comida = round(random.randrange(0, 600 - d) / 20) * 20
+
+# fonte = pygame.font.Font(None,35)
 
 tela = pygame.display.set_mode((dimensoes))
 pygame.display.set_caption('Snake da Kenzie')
@@ -122,10 +129,33 @@ def verifica_comida(dx, dy, x_comida, y_comida, lista_cobra):
     
     if head[0] == x_comida and head[1] == y_comida:
         lista_cobra.append([x_novo, y_novo])    
-    
+        x_comida = round(random.randrange(0, 600 - d) / 20) * 20
+        y_comida = round(random.randrange(0, 600 - d) / 20) * 20
+
     pygame.draw.rect(tela, verde, [x_comida, y_comida, d, d])    
     
     return x_comida, y_comida, lista_cobra
+
+def verifica_parede(lista_cobra):
+    head = lista_cobra[-1]
+    x = head[0]
+    y = head[1]
+
+    if x not in range(600) or y not in range(600):
+        raise Exception
+
+def verifica_mordeu(lista_cobra):
+    head = lista_cobra[-1]
+    corpo = lista_cobra.copy()
+    del corpo[-1]
+    for x,y in corpo:
+        if x == head[0] and y == head[1]:
+            raise Exception
+
+def atualizar_pontos(lista_cobra):
+    pts = str(len(lista_cobra)-1)
+    escore = fonte.render("Pontuação: " + pts, True, amarelo)
+    tela.blit(score,[1,1])
 
 while True:
     pygame.display.update()
@@ -134,8 +164,11 @@ while True:
     x_comida, y_comida, lista_cobra = verifica_comida(
         dx, dy, x_comida, y_comida, lista_cobra)
     print(lista_cobra)    
+    verifica_parede(lista_cobra)
+    verifica_mordeu(lista_cobra)
+    # atualizar_pontos(lista_cobra)
 
-    clock.tick(20)
+    clock.tick(12)
 '''
 # TEORIA
 import pygame
