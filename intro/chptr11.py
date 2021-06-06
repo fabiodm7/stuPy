@@ -169,8 +169,8 @@ while True:
 cursor.close()
 conexao.close()
 
-# Escreva um programa que realiza consultas do banco de dados preços.db.
-# O programa deve perguntar o nome do produto e listar seu preço
+# Escreva um programa que realiza consultas do banco de dados preços.db. O programa deve perguntar
+# o nome do produto e listar seu preço
 import sqlite3
 nome = input('Selecione o produto: ')
 conexao = sqlite3.connect('precos.db')
@@ -215,7 +215,7 @@ while True:
     x += 1
 cursor.close()
 conexao.close()
-'''
+
 # TEORIA: Atualizando o telefone
 import sqlite3
 conexao = sqlite3.connect('agenda.db')
@@ -223,3 +223,175 @@ cursor = conexao.cursor()
 cursor.execute('update agenda set telefone = "12345-6789" where nome = "Nilo"')
 conexao.commit()
 conexao.close()
+
+# TEORIA: Exemplo de update sem where e com rowcount
+import sqlite3
+conexao = sqlite3.connect('agenda.db')
+cursor = conexao.cursor()
+cursor.execute("""update agenda set telefone = '12345-6789'""")
+print('Registros alterados: ', cursor.rowcount)
+conexao.commit()
+conexao.close()
+
+# TEORIA: Update com rollback
+import sqlite3
+conexao = sqlite3.connect('agenda.db')
+cursor = conexao.cursor()
+cursor.execute("""update agenda set telefone = '12345-6789'""")
+print('Registros alterados: ', cursor.rowcount)
+if cursor.rowcount == 1:
+    conexao.commit()
+    print('Alterações gravadas')
+else:
+    conexao.rollback()
+    print('Alterações abortadas')
+conexao.close()
+
+# Escreva um programa que aumente o preço de todos os produtos do banco precos.db em 10%
+import sqlite3
+conexao = sqlite3.connect('precos.db')
+cursor = conexao.cursor()
+cursor.execute("""update precos set preco = preco + 10""")
+print('Registros alterados: ', cursor.rowcount)
+conexao.commit()
+# cursor.execute("""select * from precos""")
+# while True:
+#     resultado = cursor.fetchone()
+#     if resultado == None:
+#         break
+#     print('Produto: %s | Preco: %s' % (resultado))
+conexao.close()
+
+# Escreve um programa que pergunte o nome do produto e um novo preço. Usando o banco precos.db,
+# atualize o preço deste produto no banco de dados.
+import sqlite3
+p = input('Qual produto deseja alterar: ')
+v = float(input('Qual o novo valor: '))
+conexao = sqlite3.connect('precos.db')
+cursor = conexao.cursor()
+cursor.execute("""update precos set preco = ? where produto = ?""", (v,p))
+print('Registros alterados: ', cursor.rowcount)
+if cursor.rowcount == 1:
+    conexao.commit()
+    print('Alterações gravadas')
+else:
+    conexao.rollback()
+    print('Alterações abortadas')
+# cursor.execute("""select * from precos""")
+# while True:
+#     resultado = cursor.fetchone()
+#     if resultado == None:
+#         break
+#     print('Produto: %s | Preco: %s' % (resultado))
+conexao.close()
+
+# TEORIA: Apagando registros
+import sqlite3
+conexao = sqlite3.connect('agenda.db')
+cursor = conexao.cursor()
+cursor.execute("""delete from agenda where nome = 'Maria'""")
+print('Registros apagados: ', cursor.rowcount)
+if cursor.rowcount == 1:
+    conexao.commit()
+    print('Alterações gravadas')
+else:
+    conexao.rollback()
+    print('Alterações abortadas')
+conexao.close()
+
+# TEORIA: Consulta a vários registros, acesso simplificado
+import sqlite3
+with sqlite3.connect('agenda.db') as conexao:
+    for registro in conexao.execute('select * from agenda'):
+        print('Nome: %s | Telefone: %s' % (registro))
+
+# TEORIA: Acessando os campos pelo nome
+import sqlite3
+conexao = sqlite3.connect('agenda.db')
+conexao.row_factory = sqlite3.Row
+cursor = conexao.cursor()
+for registro in cursor.execute('select * from agenda'):
+    print('Nome: %s | Telefone: %s' % (registro['nome'],registro['telefone']))
+cursor.close()
+conexao.close()
+
+# TEORIA: Criação de banco de dados com a população dos estados brasileiros
+import sqlite3
+dados = [["Rondônia",1796460],["Acre",894470],["Amazonas",4207714],["Roraima",631181],["Pará",8690745],
+["Amapá",861773],["Tocantins",1590248],["Maranhão",7114598],["Piauí",3281480],["Ceará",9187103],
+["Rio Grande do Norte",3534165],["Paraíba",4039277],["Pernambuco",9616621],["Alagoas",3351543],
+["Sergipe",2318822],["Bahia",14930634],["Minas Gerais",21292666],["Espírito Santo",4064052],
+["Rio de Janeiro",17366189],["São Paulo",46289333],["Paraná",11516840],["Santa Catarina",7252502],
+["Rio Grande do Sul",11422973],["Mato Grosso do Sul",2809394],["Mato Grosso",3526220],["Goiás",7113540],
+["Distrito Federal",3055149]]
+conexao = sqlite3.connect('brasil.db')
+conexao.row_factory = sqlite3.Row
+cursor = conexao.cursor()
+cursor.execute("""create table estados(id integer primary key autoincrement, nome text, populacao integer)""")
+cursor.executemany("insert into estados(nome,populacao) values(?,?)",dados)
+conexao.commit()
+cursor.close()
+conexao.close()
+
+# TEORIA: Consulta dos estados brasileiros, ordenados por nome
+import sqlite3
+conexao = sqlite3.connect('brasil.db')
+conexao.row_factory = sqlite3.Row
+print('%3s %-20s %12s' % ('id','estado','populacao'))
+print('='*37)
+for estado in conexao.execute('select * from estados order by populacao desc'):
+    print('%3s %-20s %12s' % (estado['id'],estado['nome'],estado['populacao']))
+conexao.close()
+
+# TEORIA: Alterando a tabela
+import sqlite3
+with sqlite3.connect('brasil.db') as conexao:
+    conexao.execute("""alter table estados add sigla text""")
+    conexao.execute("""alter table estados add regiao text""")
+
+# TEORIA: Preechendo a sigla e a região de cada estado
+import sqlite3
+dados = [["RO","N","Rondônia"],["AC","N","Acre"],["AM","N","Amazonas"],["RR","N","Roraima"],
+["PA","N","Pará"],["AP","N","Amapá"],["TO","N","Tocantins"],["MA","NE","Maranhão"],
+["PI","NE","Piauí"],["CE","NE","Ceará"],["RN","NE","Rio Grande do Norte"],["PB","NE","Paraíba"],
+["PE","NE","Pernambuco"],["AL","NE","Alagoas"],["SE","NE","Sergipe"],["BA","NE","Bahia"],
+["MG","SE","Minas Gerais"],["ES","SE","Espírito Santo"],["RJ","SE","Rio de Janeiro"],["SP","SE","São Paulo"],
+["PR","S","Paraná"],["SC","S","Santa Catarina"],["RS","S","Rio Grande do Sul"],["MS","CO","Mato Grosso do Sul"],
+["MT","CO","Mato Grosso"],["GO","CO","Goiás"],["DF","CO","Distrito Federal"]]
+with sqlite3.connect('brasil.db') as conexao:
+    conexao.executemany("""update estados set sigla = ?, regiao = ? where nome = ?""", dados)
+
+# TEORIA: Agrupando e contando estados por região
+import sqlite3
+print('Região Números de estados')
+print('====== ==================')
+with sqlite3.connect('brasil.db') as conexao:
+    for regiao in conexao.execute("""select regiao, count(*) from estados group by regiao"""):
+        print('{0:6} {1:17}'.format(*regiao))
+
+# TEORIA: Usando as funções de agregação
+import sqlite3
+print('Regiao Estados População   Mínima     Máxima     Média      Total')
+print('====== =======         ========== ========== ==========    ==========')
+with sqlite3.connect('brasil.db') as conexao:
+    for regiao in conexao.execute("""select regiao, count(*), min(populacao), max(populacao), avg(populacao), sum(populacao) from estados group by regiao"""):
+        print('{0:6} {1:7} {2:18,} {3:10,} {4:10,.0f} {5:13,}'.format(*regiao))
+    print('\nBrasil: {0:6} {1:18,} {2:10,} {3:10,.0f} {4:13,}'.format(*conexao.execute("""select count(*), min(populacao),max(populacao),avg(populacao),sum(populacao) from estados""").fetchone()))
+
+# TEORIA: Funções de agregação com order by
+import sqlite3
+print('Regiao Estados População   Mínima     Máxima     Média      Total')
+print('====== =======         ========== ========== ==========    ==========')
+with sqlite3.connect('brasil.db') as conexao:
+    for regiao in conexao.execute("""select regiao, count(*), min(populacao), max(populacao), avg(populacao), sum(populacao) from estados group by regiao order by sum(populacao) desc"""):
+        print('{0:6} {1:7} {2:18,} {3:10,} {4:10,.0f} {5:13,}'.format(*regiao))
+    print('\nBrasil: {0:6} {1:18,} {2:10,} {3:10,.0f} {4:13,}'.format(*conexao.execute("""select count(*), min(populacao),max(populacao),avg(populacao),sum(populacao) from estados""").fetchone()))
+
+# TEORIA: Utilizando having para ordenar apenas regiões com mais de 5 estados
+import sqlite3
+print('Regiao Estados População   Mínima     Máxima     Média      Total')
+print('====== =======         ========== ========== ==========    ==========')
+with sqlite3.connect('brasil.db') as conexao:
+    for regiao in conexao.execute("""select regiao, count(*), min(populacao), max(populacao), avg(populacao), sum(populacao) as tpop from estados group by regiao having count(*) > 5 order by tpop desc"""):
+        print('{0:6} {1:7} {2:18,} {3:10,} {4:10,.0f} {5:13,}'.format(*regiao))
+'''
