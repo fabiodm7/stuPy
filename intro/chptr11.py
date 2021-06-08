@@ -394,4 +394,44 @@ print('====== =======         ========== ========== ==========    ==========')
 with sqlite3.connect('brasil.db') as conexao:
     for regiao in conexao.execute("""select regiao, count(*), min(populacao), max(populacao), avg(populacao), sum(populacao) as tpop from estados group by regiao having count(*) > 5 order by tpop desc"""):
         print('{0:6} {1:7} {2:18,} {3:10,} {4:10,.0f} {5:13,}'.format(*regiao))
+
+# TEORIA: Criando uma tabela de feriados nacionais
+import sqlite3
+feriados = [['2021-01-01','Confraternização universal'],['2021-04-21','Tiradentes'],
+            ['2021-05-01','Dia do trabalhador'],['2021-09-07','Idenpendência'],
+            ['2021-10-12','Padroeira do Brasil'],['2021-11-02','Finados'],
+            ['2021-11-15','Proclamação da república'],['2021-12-25','Natal']]
+with sqlite3.connect('brasil.db') as conexao:
+    conexao.execute('drop table feriados')
+    conexao.execute('create table feriados(id integer primary key autoincrement, data date, descricao text)')
+    conexao.executemany('insert into feriados(data,descricao) values (?,?)',feriados)
+
+# TEORIA: Acessando um campo do tipo data
+import sqlite3
+with sqlite3.connect('brasil.db') as conexao:
+    for feriado in conexao.execute('select * from feriados'):
+        print(feriado)
+
+# TEORIA: Solicitando o tratamento do tipo dos campos
+import sqlite3
+with sqlite3.connect('brasil.db',detect_types=sqlite3.PARSE_DECLTYPES) as conexao:
+    for feriado in conexao.execute('select * from feriados'):
+        print(feriado)
+
+# TEORIA: Trabalhando com datas
+import sqlite3
+with sqlite3.connect('brasil.db',detect_types=sqlite3.PARSE_DECLTYPES) as conexao:
+    conexao.row_factory = sqlite3.Row
+    for feriado in conexao.execute('select * from feriados'):
+        print('{0} {1}'.format(feriado['data'].strftime('%d/%m'),feriado['descricao']))
+
+# TEORIA: Feriados nos próximos 60 dias
+import sqlite3
+import datetime
+hoje = datetime.date.today()
+hoje60dias = hoje + datetime.timedelta(days=60)
+with sqlite3.connect('brasil.db',detect_types=sqlite3.PARSE_DECLTYPES) as conexao:
+    conexao.row_factory = sqlite3.Row
+    for feriado in conexao.execute('select * from feriados where data >= ? and data <= ?',(hoje, hoje60dias)):
+        print('{0} {1}'.format(feriado['data'].strftime('%d/%m'),feriado['descricao']))
 '''
