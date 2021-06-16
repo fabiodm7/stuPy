@@ -435,3 +435,81 @@ with sqlite3.connect('brasil.db',detect_types=sqlite3.PARSE_DECLTYPES) as conexa
     for feriado in conexao.execute('select * from feriados where data >= ? and data <= ?',(hoje, hoje60dias)):
         print('{0} {1}'.format(feriado['data'].strftime('%d/%m'),feriado['descricao']))
 '''
+# TEORIA: Agenda com banco de dados completa
+import sys
+import sqlite3
+import os.path
+from functools import total_ordering
+banco = """
+    create table tipos(id integer primary key autoincrement, descricao text);
+    create table nomes(id integer primary key autoincrement, nome text);
+    create table telefones(id integer primary key autoincrement, id_nome integer, numero text, id_tipo integer);
+    insert into tipos(descricao) values ('celular');
+    insert into tipos(descricao) values ('fixo');
+    insert into tipos(descricao) values ('fax');
+    insert into tipos(descricao) values ('casa');
+    insert into tipos(descricao) values ('trabalho');
+"""
+
+def nulo_ou_vazio(texto):
+    return texto == None or not texto.strip()
+def valida_faixa_inteiro(pergunta, inicio, fim, padrao = None):
+    while True:
+        try:
+            entrada = input(pergunta)
+            if nulo_ou_vazio(entrada) and padrao != None:
+                entrada = padrao
+                valor = int(entrada)
+                if inicio <= valor <= fim:
+                    return(valor)
+        except ValueError:
+            print('Valor inválido, favor digitar entre %d e %d' % (inicio,fim))
+def valida_faixa_inteiro_ou_branco(pergunta,inicio,fim):
+    while True:
+        try:
+            entrada = input(pergunta)
+            if nulo_ou_vazio(entrada):
+                return None
+            valor = int(entrada)
+            if inicio <= valor <= fim:
+                return(valor)
+        except ValueError:
+            print('Valor inválido, favor digitar entre %d e %d' % (inicio,fim))
+class ListaUnica:
+    def __init__(self,elem_class):
+        self.lista = []
+        self.elem_class = elem_class
+    def __len__(self):
+        return len(self.lista)
+    def __iter__(self):
+        return iter(self.lista)
+    def __getitem__(self,p):
+        return self.lista[p]
+    def indiceValido(self,i):
+        return i >= 0 and i <= len(self.lista)
+    def adiciona(self,elem):
+        if self.pesquisa(elem) == -1:
+            self.lista.append(elem)
+    def remove(self,elem):
+        self.lista.remove(elem)
+    def pesquisa(self,elem):
+        self.verifica_tipo(elem)
+        try:
+            return self.lista.index(elem)
+        except ValueError:
+            return -1
+    def verifica_tipo(self,elem):
+        if type(elem) != self.elem_class:
+            raise TypeError('Tipo inválido')
+    def ordena(self,chave = None):
+        self.lista.sort(key=chave)
+class DBListaUnica(ListaUnica):
+    def __init__(self,elem_class):
+        super().__init__(elem_class)
+        self.apagados = []
+    def remove(self, elem):
+        if elem.id is not None:
+            self.apagados.append(elem.id)
+        super().remove(elem)
+    def limpa(self):
+        self.apagados = []
