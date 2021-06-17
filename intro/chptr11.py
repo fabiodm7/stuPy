@@ -4,22 +4,21 @@ de Nilo Ney Coutinho Menezes
 
 Banco de dados
 '''
-'''
 # TEORIA: Exemplo de uso do SQLite em Python
 import sqlite3
 
 conexao = sqlite3.connect('agenda.db')
 cursor = conexao.cursor()
-cursor.execute(''''''
+cursor.execute("""
     create table agenda (
         nome text,
         telefone text
     )
-'''''')
-cursor.execute(''''''
+""")
+cursor.execute("""
     insert into agenda (nome, telefone)
         values(?,?)
-'''''',('Nilo','97788-1432'))
+""",('Nilo','97788-1432'))
 conexao.commit()
 cursor.close()
 conexao.close()
@@ -98,12 +97,12 @@ dados = [   ('pera',2.00),
 
 conexao = sqlite3.connect('precos.db')
 cursor = conexao.cursor()
-cursor.execute(''''''
+cursor.execute("""
     create table precos (
         produto text,
         preco text
     )
-'''''')
+""")
 cursor.executemany(
     'insert into precos (produto, preco) values(?,?)',dados
 )
@@ -195,7 +194,7 @@ minimo = float(input('Valor mínimo: '))
 maximo = float(input('Valor máximo: '))
 conexao = sqlite3.connect('precos.db')
 cursor = conexao.cursor()
-cursor.execute(''''''
+cursor.execute("""
     select
         *
     from
@@ -203,7 +202,7 @@ cursor.execute(''''''
     where
         preco >= ?
         and preco <= ?
-    '''''', (minimo,maximo))
+    """, (minimo,maximo))
 x = 0
 while True:
     resultado = cursor.fetchone()
@@ -434,7 +433,7 @@ with sqlite3.connect('brasil.db',detect_types=sqlite3.PARSE_DECLTYPES) as conexa
     conexao.row_factory = sqlite3.Row
     for feriado in conexao.execute('select * from feriados where data >= ? and data <= ?',(hoje, hoje60dias)):
         print('{0} {1}'.format(feriado['data'].strftime('%d/%m'),feriado['descricao']))
-'''
+
 # TEORIA: Agenda com banco de dados completa
 import sys
 import sqlite3
