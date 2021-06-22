@@ -4,6 +4,7 @@ de Nilo Ney Coutinho Menezes
 
 Banco de dados
 '''
+'''
 # TEORIA: Exemplo de uso do SQLite em Python
 import sqlite3
 
@@ -433,7 +434,7 @@ with sqlite3.connect('brasil.db',detect_types=sqlite3.PARSE_DECLTYPES) as conexa
     conexao.row_factory = sqlite3.Row
     for feriado in conexao.execute('select * from feriados where data >= ? and data <= ?',(hoje, hoje60dias)):
         print('{0} {1}'.format(feriado['data'].strftime('%d/%m'),feriado['descricao']))
-
+'''
 # TEORIA: Agenda com banco de dados completa
 import sys
 import sqlite3
